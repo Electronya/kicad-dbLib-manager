@@ -21,7 +21,7 @@ class DbLibrary(QObject):
                 'username': '',
                 'password': '',
                 'connection_string': '',
-                'timeout_seconds': '',
+                'timeout_seconds': 2,
             },
             'libraries': [],
         }
