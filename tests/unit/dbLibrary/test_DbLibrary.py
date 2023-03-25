@@ -36,6 +36,8 @@ class TestDbLibrary(TestCase):
         }
         with open(('./tests/unit/dbLibrary/testDbLib.kicad_dbl')) as fd:
             self.libConfig = json.load(fd)
+            fd.seek(0)
+            self.libConfigStr = fd.read()
         self.libPath = '/home/jbacon/test'
         with patch.object(DbLibrary, '_openLib'):
             self.dut = DbLibrary(self.libPath)
@@ -133,3 +135,48 @@ class TestDbLibrary(TestCase):
             self.assertEqual(self.dut._config, self.template,
                              '_createNewLib failed to save the template '
                              'config.')
+
+    def test_openLibOpenFileError(self) -> None:
+        """
+        The _openLib method must raise an exception when opening the
+        DB library file fails.
+        """
+        errMsg = 'test error'
+        with patch('builtins.open') as mockedOpen, \
+                self.assertRaises(OSError) as context:
+            mockedOpen.side_effect = OSError(errMsg)
+            self.dut._openLib()
+        self.assertEqual(str(context.exception), errMsg,
+                         '_openLib failed to raise an exception when opening '
+                         'the library file.')
+
+    def test_openLibLoadError(self) -> None:
+        """
+        The _openLib method must raise an exception when loading the config
+        fails.
+        """
+        errMsg = 'test error'
+        with patch('builtins.open', mock_open(read_data=self.libConfigStr)), \
+                patch(self.jsonPkg) as mockedJsonPkg, \
+                self.assertRaises(json.JSONDecodeError) as context:
+            mockedJsonPkg.load.side_effect = json.JSONDecodeError(errMsg,
+                                                                  'test', 2)
+            self.dut._openLib()
+        self.assertEqual(str(context.exception),
+                         f"{errMsg}: line 1 column 3 (char 2)",
+                         '_openLib failed to raise an exception when '
+                         'loading the config from the library file fails.')
+
+    def test_openLib(self) -> None:
+        """
+        The _openLib method must read the DB library file and load the library
+        configuration.
+        """
+        with patch('builtins.open', mock_open(read_data=self.libConfigStr)) \
+                as mockedOpen, patch(self.jsonPkg) as mockedJsonPkg:
+            mockedJsonPkg.load.return_value = self.libConfig
+            self.dut._openLib()
+            mockedOpen.assert_called_once_with(self.dut._path)
+            mockedJsonPkg.load.assert_called_once_with(mockedOpen().__enter__())    # noqa: E501
+            self.assertEqual(self.dut._config, self.libConfig,
+                             '_openLib failed to load the library config.')
