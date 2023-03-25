@@ -4,7 +4,7 @@ declare -A WINDOWS=()
 
 #### Page list ####
 WINDOWS[main]='main'
-WINDOWS[about]='about'
+# WINDOWS[about]='about'
 WINDOWS[dbLibrary]='dbLibrary'
 
 #### Print red text to the terminal ####
@@ -97,9 +97,9 @@ do
             compileResources
             ;;
         a)
-            for page in "${PAGES[@]}"
+            for window in "${WINDOWS[@]}"
             do
-                compilePage "${page}"
+                compileWindow "${window}"
             done
             compileResources
             ;;
