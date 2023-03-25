@@ -5,7 +5,8 @@ omit =
     */distutils/*
     tests/*
     src/ui/assets/resources_auto.py
-    src/ui/windows/appWindow_auto.py
+    src/mainWindow/mainWindow_auto.py
+    src/settingsWindow/settingsWindow_auto.py
 
 [report]
 exclude_lines =
