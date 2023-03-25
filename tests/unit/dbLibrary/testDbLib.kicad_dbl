@@ -8,7 +8,7 @@
         "username": "user",
         "password": "password",
         "connection_string": "connection string",
-        "timeout_seconds": 2,
+        "timeout_seconds": 2
     },
-    "libraries": [],
+    "libraries": []
 }
