@@ -17,7 +17,100 @@
    <iconset resource="../assets/resources.qrc">
     <normaloff>:/windows/icons/app-icon.png</normaloff>:/windows/icons/app-icon.png</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="libListGroupBox">
+      <property name="title">
+       <string>Libraries</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="2">
+        <widget class="QToolButton" name="libDelTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/delete.svg</normaloff>:/tools/icons/delete.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QToolButton" name="libEditTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/edit.svg</normaloff>:/tools/icons/edit.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QToolButton" name="libAddTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/add.svg</normaloff>:/tools/icons/add.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="4">
+        <widget class="QListView" name="listView"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="compListGroupBox">
+      <property name="title">
+       <string>Components</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="2">
+        <widget class="QToolButton" name="compDelTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/delete.svg</normaloff>:/tools/icons/delete.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QToolButton" name="compEditTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/edit.svg</normaloff>:/tools/icons/edit.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QToolButton" name="compAddTbtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../assets/resources.qrc">
+           <normaloff>:/tools/icons/add.svg</normaloff>:/tools/icons/add.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="4">
+        <widget class="QTableView" name="tableView"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -27,8 +120,99 @@
      <height>30</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuDB_Library">
+     <property name="title">
+      <string>DB Library</string>
+     </property>
+     <addaction name="actionNewDbLib"/>
+     <addaction name="actionDeleteDbLib"/>
+     <addaction name="actionOpenDbLib"/>
+     <addaction name="actionEditDbLib"/>
+    </widget>
+    <addaction name="menuDB_Library"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNewDbLib"/>
+   <addaction name="actionDeleteDbLib"/>
+   <addaction name="actionOpenDbLib"/>
+   <addaction name="actionEditDbLib"/>
+  </widget>
+  <action name="actionNewDbLib">
+   <property name="icon">
+    <iconset resource="../assets/resources.qrc">
+     <normaloff>:/tools/icons/dbLib-new.svg</normaloff>:/tools/icons/dbLib-new.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new DB Library</string>
+   </property>
+  </action>
+  <action name="actionOpenDbLib">
+   <property name="icon">
+    <iconset resource="../assets/resources.qrc">
+     <normaloff>:/tools/icons/dbLib-open.svg</normaloff>:/tools/icons/dbLib-open.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a DB Library</string>
+   </property>
+  </action>
+  <action name="actionDeleteDbLib">
+   <property name="icon">
+    <iconset resource="../assets/resources.qrc">
+     <normaloff>:/tools/icons/dbLib-delete.svg</normaloff>:/tools/icons/dbLib-delete.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete the DB Library</string>
+   </property>
+  </action>
+  <action name="actionEditDbLib">
+   <property name="icon">
+    <iconset resource="../assets/resources.qrc">
+     <normaloff>:/tools/icons/dbLib-edit.svg</normaloff>:/tools/icons/dbLib-edit.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit the DB Library</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../assets/resources.qrc"/>

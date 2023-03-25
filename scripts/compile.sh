@@ -4,8 +4,7 @@ declare -A WINDOWS=()
 
 #### Page list ####
 WINDOWS[main]='main'
-WINDOWS[about]='about'
-WINDOWS[settings]='settings'
+# WINDOWS[about]='about'
 
 #### Print red text to the terminal ####
 function redPrint {
@@ -97,9 +96,9 @@ do
             compileResources
             ;;
         a)
-            for page in "${PAGES[@]}"
+            for window in "${WINDOWS[@]}"
             do
-                compilePage "${page}"
+                compileWindow "${window}"
             done
             compileResources
             ;;
