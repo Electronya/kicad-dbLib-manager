@@ -8,3 +8,4 @@ flake8>=3.9.2
 # App dependencies
 PySide2>=5.15.2
 mysql-connector-python>=8.0.32
+keyring>=23.13.1
