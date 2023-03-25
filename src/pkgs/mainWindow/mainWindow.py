@@ -5,6 +5,8 @@ import PySide2.QtWidgets as qtw
 
 from .mainWindow_auto import Ui_mainWindow
 
+from ..dbLibrary import DbLibrary
+
 
 class MainWindow(qtw.QMainWindow, Ui_mainWindow):
     """
@@ -12,7 +14,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
     """
     errSig = qtc.Signal(qtw.QMessageBox.Icon, Exception)
     aboutSig = qtc.Signal()
-    dbLibSig = qtc.Signal()
+    dbLibSig = qtc.Signal(DbLibrary)
 
     def __init__(self) -> None:
         """
@@ -41,6 +43,11 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         Create a new DB library file.
         """
         self._logger.debug('creating a new DB library file')
+        fileInfo = qtw.QFileDialog \
+            .getSaveFileName(self, 'New DB Library',
+                             '~/', 'DB Library (*.kicad_dbl)')
+        self._dbLib = DbLibrary(fileInfo[0], isNew=True)
+        self.dbLibSig.emit(self._dbLib)
 
     @qtc.Slot()
     def _openDbLibFile(self) -> None:
