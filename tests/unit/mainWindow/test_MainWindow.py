@@ -166,3 +166,11 @@ class TestMainWindow(TestCase):
             mockedFileDialog.getOpenFileName.return_value = testFileInfo
             self.dut._openDbLibFile()
             mockedDbLib.assert_called_once_with(testFileInfo[0])
+
+    def test_openDbLibFileEnableEdit(self) -> None:
+        """
+        The _openDbLibFile method must enable the DB library edit action.
+        """
+        with patch(self.QFileDialog), patch(self.DbLibrary):
+            self.dut._openDbLibFile()
+            self.dut.actionEditDbLib.setEnabled.assert_called_once_with(True)
