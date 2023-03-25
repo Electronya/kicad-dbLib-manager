@@ -37,6 +37,9 @@ class DbLibrary(QObject):
             },
             'libraries': [],
         }
+        with open(self._path, 'w') as fd:
+            self._config = template
+            json.dump(template, fd, indent=4)
 
     def _openLib(self) -> None:
         """
