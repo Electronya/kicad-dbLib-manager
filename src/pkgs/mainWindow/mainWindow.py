@@ -19,6 +19,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         self._logger = logging.getLogger('app.windows.main')
         self._logger.info('loading UI...')
         self.setupUi(self)
+        self.setWindowState(qtc.Qt.WindowMaximized)
 
     @qtc.Slot(qtw.QMessageBox.Icon, Exception)
     def _createErrorMsgBox(self, lvl: qtw.QMessageBox.Icon,
