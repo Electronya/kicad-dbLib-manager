@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, QDir
 
 import os
 import sys
@@ -105,7 +105,8 @@ class TestMainWindow(TestCase):
             .assert_called_once_with(self.dut._newDbLibFile)
         self.dut.actionOpenDbLib.triggered.connect \
             .assert_called_once_with(self.dut._openDbLibFile)
-        self.dut.actionEditDbLib.triggered.connect.assert_called_once()
+        self.dut.actionEditDbLib.triggered.connect \
+            .assert_called_once_with(self.dut._editDbLibFile)
 
     def test_newDbLibFileSaveDialog(self) -> None:
         """
@@ -115,8 +116,9 @@ class TestMainWindow(TestCase):
                 patch(self.DbLibrary):
             self.dut._newDbLibFile()
             mockedFileDialog.getSaveFileName \
-                .assert_called_once_with(self.dut, 'New DB Library', '~/',
-                                         'DB Library (*.kicad_dbl)')
+                .assert_called_once_with(self.dut, caption='New DB Library',
+                                         dir=QDir.homePath(),
+                                         filter='DB Library (*.kicad_dbl)')
 
     def test_newDbLibFileCreateLibInst(self) -> None:
         """
@@ -140,3 +142,27 @@ class TestMainWindow(TestCase):
             mockedDbLib.return_value = testLib
             self.dut._newDbLibFile()
             self.dut.dbLibSig.emit.assert_called_once_with(testLib)
+
+    def test_openDbLibFileOpenDialog(self) -> None:
+        """
+        The _openDbLibFile method must open an open file dialog box.
+        """
+        with patch(self.QFileDialog) as mockedFileDialog, \
+                patch(self.DbLibrary):
+            self.dut._openDbLibFile()
+            mockedFileDialog.getOpenFileName \
+                .assert_called_once_with(self.dut, caption='Open DB Library',
+                                         dir=QDir.homePath(),
+                                         filter='DB Library (*.kicad_dbl)')
+
+    def test_openDbLibFileNewInst(self) -> None:
+        """
+        The _openDbLibFile method must create a new DB library instance with
+        the path given by the user.
+        """
+        testFileInfo = ('/home/jbacon/test', 'DB Library (*.kicad_dbl)')
+        with patch(self.QFileDialog) as mockedFileDialog, \
+                patch(self.DbLibrary) as mockedDbLib:
+            mockedFileDialog.getOpenFileName.return_value = testFileInfo
+            self.dut._openDbLibFile()
+            mockedDbLib.assert_called_once_with(testFileInfo[0])

@@ -23,9 +23,11 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         super(MainWindow, self).__init__()
         self._logger = logging.getLogger('app.windows.main')
         self._logger.info('loading UI...')
+        self._dbLib = None
         self.setupUi(self)
         self.setWindowState(qtc.Qt.WindowMaximized)
         self._setupActions()
+        self._logger.info('UI leaded')
 
     def _setupActions(self) -> None:
         """
@@ -44,8 +46,9 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         """
         self._logger.debug('creating a new DB library file')
         fileInfo = qtw.QFileDialog \
-            .getSaveFileName(self, 'New DB Library',
-                             '~/', 'DB Library (*.kicad_dbl)')
+            .getSaveFileName(self, caption='New DB Library',
+                             dir=qtc.QDir.homePath(),
+                             filter='DB Library (*.kicad_dbl)')
         self._dbLib = DbLibrary(fileInfo[0], isNew=True)
         self.dbLibSig.emit(self._dbLib)
 
@@ -55,3 +58,9 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         Open a DB library file.
         """
         self._logger.debug('opening an existing DB library file')
+        fileInfo = qtw.QFileDialog \
+            .getOpenFileName(self, caption='Open DB Library',
+                             dir=qtc.QDir.homePath(),
+                             filter='DB Library (*.kicad_dbl)')
+        self._dbLib = DbLibrary(fileInfo[0])
+
