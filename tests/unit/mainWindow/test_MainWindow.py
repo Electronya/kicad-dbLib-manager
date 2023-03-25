@@ -174,3 +174,14 @@ class TestMainWindow(TestCase):
         with patch(self.QFileDialog), patch(self.DbLibrary):
             self.dut._openDbLibFile()
             self.dut.actionEditDbLib.setEnabled.assert_called_once_with(True)
+
+    def test_editDbLibFileEmitSig(self) -> None:
+        """
+        The _editDbLibFile method must emit the DB library signal only when
+        a DB library is open.
+        """
+        dbLibs = (None, Mock())
+        for dbLib in dbLibs:
+            self.dut._dbLib = dbLib
+            self.dut._editDbLibFile()
+        self.dut.dbLibSig.emit.assert_called_once_with(dbLibs[1])

@@ -37,7 +37,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         self.actionAbout.triggered.connect(self.aboutSig.emit)
         self.actionNewDbLib.triggered.connect(self._newDbLibFile)
         self.actionOpenDbLib.triggered.connect(self._openDbLibFile)
-        self.actionEditDbLib.triggered.connect(self.dbLibSig.emit)
+        self.actionEditDbLib.triggered.connect(self._editDbLibFile)
 
     @qtc.Slot()
     def _newDbLibFile(self) -> None:
@@ -65,3 +65,11 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         self._dbLib = DbLibrary(fileInfo[0])
         self.actionEditDbLib.setEnabled(True)
 
+    @qtc.Slot()
+    def _editDbLibFile(self) -> None:
+        """
+        Edit a DB library file.
+        """
+        self._logger.debug('editing DB library file')
+        if self._dbLib is not None:
+            self.dbLibSig.emit(self._dbLib)
