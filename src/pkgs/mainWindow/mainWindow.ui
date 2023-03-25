@@ -129,7 +129,6 @@
       <string>DB Library</string>
      </property>
      <addaction name="actionNewDbLib"/>
-     <addaction name="actionDeleteDbLib"/>
      <addaction name="actionOpenDbLib"/>
      <addaction name="actionEditDbLib"/>
     </widget>
@@ -156,14 +155,13 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNewDbLib"/>
-   <addaction name="actionDeleteDbLib"/>
    <addaction name="actionOpenDbLib"/>
    <addaction name="actionEditDbLib"/>
   </widget>
   <action name="actionNewDbLib">
    <property name="icon">
     <iconset resource="../assets/resources.qrc">
-     <normaloff>:/tools/icons/dbLib-new.svg</normaloff>:/tools/icons/dbLib-new.svg</iconset>
+     <normaloff>:/tools/icons/new.svg</normaloff>:/tools/icons/new.svg</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -175,7 +173,7 @@
   <action name="actionOpenDbLib">
    <property name="icon">
     <iconset resource="../assets/resources.qrc">
-     <normaloff>:/tools/icons/dbLib-open.svg</normaloff>:/tools/icons/dbLib-open.svg</iconset>
+     <normaloff>:/tools/icons/open.svg</normaloff>:/tools/icons/open.svg</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -184,22 +182,10 @@
     <string>Open a DB Library</string>
    </property>
   </action>
-  <action name="actionDeleteDbLib">
-   <property name="icon">
-    <iconset resource="../assets/resources.qrc">
-     <normaloff>:/tools/icons/dbLib-delete.svg</normaloff>:/tools/icons/dbLib-delete.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Delete</string>
-   </property>
-   <property name="toolTip">
-    <string>Delete the DB Library</string>
-   </property>
-  </action>
   <action name="actionEditDbLib">
    <property name="icon">
     <iconset resource="../assets/resources.qrc">
-     <normaloff>:/tools/icons/dbLib-edit.svg</normaloff>:/tools/icons/dbLib-edit.svg</iconset>
+     <normaloff>:/tools/icons/edit.svg</normaloff>:/tools/icons/edit.svg</iconset>
    </property>
    <property name="text">
     <string>Edit</string>

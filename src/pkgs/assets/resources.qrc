@@ -3,12 +3,10 @@
     <file>icons/app-icon.png</file>
   </qresource>
   <qresource prefix="tools">
+    <file>icons/new.svg</file>
+    <file>icons/open.svg</file>
     <file>icons/add.svg</file>
     <file>icons/delete.svg</file>
     <file>icons/edit.svg</file>
-    <file>icons/dbLib-open.svg</file>
-    <file>icons/dbLib-delete.svg</file>
-    <file>icons/dbLib-edit.svg</file>
-    <file>icons/dbLib-new.svg</file>
   </qresource>
 </RCC>
