@@ -21,6 +21,9 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QGroupBox" name="libListGroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Libraries</string>
       </property>
@@ -66,6 +69,9 @@
     </item>
     <item row="0" column="1">
      <widget class="QGroupBox" name="compListGroupBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Components</string>
       </property>
@@ -183,6 +189,9 @@
    </property>
   </action>
   <action name="actionEditDbLib">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../assets/resources.qrc">
      <normaloff>:/tools/icons/edit.svg</normaloff>:/tools/icons/edit.svg</iconset>

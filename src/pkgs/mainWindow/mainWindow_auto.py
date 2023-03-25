@@ -34,6 +34,7 @@ class Ui_mainWindow(object):
         self.actionOpenDbLib.setIcon(icon2)
         self.actionEditDbLib = QAction(mainWindow)
         self.actionEditDbLib.setObjectName(u"actionEditDbLib")
+        self.actionEditDbLib.setEnabled(False)
         icon3 = QIcon()
         icon3.addFile(u":/tools/icons/edit.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.actionEditDbLib.setIcon(icon3)
@@ -45,6 +46,7 @@ class Ui_mainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.libListGroupBox = QGroupBox(self.centralwidget)
         self.libListGroupBox.setObjectName(u"libListGroupBox")
+        self.libListGroupBox.setEnabled(False)
         self.gridLayout_2 = QGridLayout(self.libListGroupBox)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.libDelTbtn = QToolButton(self.libListGroupBox)
@@ -79,6 +81,7 @@ class Ui_mainWindow(object):
 
         self.compListGroupBox = QGroupBox(self.centralwidget)
         self.compListGroupBox.setObjectName(u"compListGroupBox")
+        self.compListGroupBox.setEnabled(False)
         self.gridLayout_3 = QGridLayout(self.compListGroupBox)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.compDelTbtn = QToolButton(self.compListGroupBox)
