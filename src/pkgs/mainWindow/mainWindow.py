@@ -1,5 +1,4 @@
 import logging
-import sys
 
 import PySide2.QtCore as qtc
 import PySide2.QtWidgets as qtw
@@ -11,6 +10,10 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
     """
     The application main window.
     """
+    errSig = qtc.Signal(qtw.QMessageBox.Icon, Exception)
+    aboutSig = qtc.Signal()
+    dbLibSig = qtc.Signal()
+
     def __init__(self) -> None:
         """
         Constructor.
@@ -20,19 +23,28 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
         self._logger.info('loading UI...')
         self.setupUi(self)
         self.setWindowState(qtc.Qt.WindowMaximized)
+        self._setupActions()
 
-    @qtc.Slot(qtw.QMessageBox.Icon, Exception)
-    def _createErrorMsgBox(self, lvl: qtw.QMessageBox.Icon,
-                           error: Exception) -> None:
+    def _setupActions(self) -> None:
         """
-        Create a error message box.
+        Setup the UI actions.
         """
-        self._logger.error(f"error: {str(error)}")
-        msgBox = qtw.QMessageBox(self)
-        msgBox.setWindowTitle('Error!!')
-        msgBox.setText(str(error))
-        msgBox.setIcon(lvl)
-        if lvl == qtw.QMessageBox.Critical:
-            self._logger.debug('connecting to button clicked for critical')
-            msgBox.buttonClicked.connect(lambda i: sys.exit(1))
-        msgBox.exec_()
+        self._logger.debug('setting up actions')
+        self.actionAbout.triggered.connect(self.aboutSig.emit)
+        self.actionNewDbLib.triggered.connect(self._newDbLibFile)
+        self.actionOpenDbLib.triggered.connect(self._openDbLibFile)
+        self.actionEditDbLib.triggered.connect(self.dbLibSig.emit)
+
+    @qtc.Slot()
+    def _newDbLibFile(self) -> None:
+        """
+        Create a new DB library file.
+        """
+        self._logger.debug('creating a new DB library file')
+
+    @qtc.Slot()
+    def _openDbLibFile(self) -> None:
+        """
+        Open a DB library file.
+        """
+        self._logger.debug('opening an existing DB library file')

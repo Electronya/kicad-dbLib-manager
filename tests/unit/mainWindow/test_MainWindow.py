@@ -25,9 +25,20 @@ class TestMainWindow(TestCase):
         self.mockedLogger = Mock()
         with patch(self.QMainWindow), patch(self.loggingMod) as mockedLogMod, \
                 patch.object(MainWindow, 'setupUi'), \
-                patch.object(MainWindow, 'setWindowState'):
+                patch.object(MainWindow, 'setWindowState'), \
+                patch.object(MainWindow, '_setupActions'):
             mockedLogMod.getLogger.return_value = self.mockedLogger
             self.dut = MainWindow()
+        self._setupMockedActions()
+
+    def _setupMockedActions(self) -> None:
+        """
+        Setup the mocked actions.
+        """
+        self.dut.actionAbout = Mock()
+        self.dut.actionEditDbLib = Mock()
+        self.dut.actionNewDbLib = Mock()
+        self.dut.actionOpenDbLib = Mock()
 
     def test_constructorLogger(self) -> None:
         """
@@ -35,7 +46,8 @@ class TestMainWindow(TestCase):
         """
         with patch(self.QMainWindow), patch(self.loggingMod) as mockedLogMod, \
                 patch.object(MainWindow, 'setupUi'), \
-                patch.object(MainWindow, 'setWindowState'):
+                patch.object(MainWindow, 'setWindowState'), \
+                patch.object(MainWindow, '_setupActions'):
             MainWindow()
             mockedLogMod.getLogger.assert_called_once_with('app.windows.main')
 
@@ -45,7 +57,8 @@ class TestMainWindow(TestCase):
         """
         with patch(self.QMainWindow), patch(self.loggingMod), \
                 patch.object(MainWindow, 'setupUi') as mockedSetupUi, \
-                patch.object(MainWindow, 'setWindowState'):
+                patch.object(MainWindow, 'setWindowState'), \
+                patch.object(MainWindow, '_setupActions'):
             dut = MainWindow()
             mockedSetupUi.assert_called_once_with(dut)
 
@@ -55,6 +68,30 @@ class TestMainWindow(TestCase):
         """
         with patch(self.QMainWindow), patch(self.loggingMod), \
                 patch.object(MainWindow, 'setupUi'), \
+                patch.object(MainWindow, '_setupActions'), \
                 patch.object(MainWindow, 'setWindowState') as mockedSetWinState:    # noqa: E501
             MainWindow()
             mockedSetWinState.assert_called_once_with(Qt.WindowMaximized)
+
+    def test_constructorSetupActions(self) -> None:
+        """
+        The constructor must setup the main window actions.
+        """
+        with patch(self.QMainWindow), patch(self.loggingMod), \
+                patch.object(MainWindow, 'setupUi'), \
+                patch.object(MainWindow, 'setWindowState'), \
+                patch.object(MainWindow, '_setupActions') as mockedSetupActions:    # noqa: E501
+            MainWindow()
+            mockedSetupActions.assert_called_once()
+
+    def test_setupActions(self) -> None:
+        """
+        The _setupActions method must connect all the main window actions.
+        """
+        self.dut._setupActions()
+        self.dut.actionAbout.triggered.connect.assert_called_once()
+        self.dut.actionNewDbLib.triggered.connect \
+            .assert_called_once_with(self.dut._newDbLibFile)
+        self.dut.actionOpenDbLib.triggered.connect \
+            .assert_called_once_with(self.dut._openDbLibFile)
+        self.dut.actionEditDbLib.triggered.connect.assert_called_once()
