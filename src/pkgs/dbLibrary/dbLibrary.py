@@ -1,3 +1,4 @@
+import logging
 import json
 
 from PySide2.QtCore import QObject
@@ -10,6 +11,17 @@ class DbLibrary(QObject):
     def __init__(self, path: str, isNew: bool = False) -> None:
         """
         Constructor.
+        """
+        QObject.__init__(self)
+        self._path = path
+        if isNew:
+            self._createNewLib()
+        else:
+            self._openLib()
+
+    def _createNewLib(self) -> None:
+        """
+        Create a new DB library.
         """
         template = {
             'meta': {'version': 0},
@@ -25,4 +37,8 @@ class DbLibrary(QObject):
             },
             'libraries': [],
         }
-        QObject.__init__(self)
+
+    def _openLib(self) -> None:
+        """
+        Open an existing DB library.
+        """
