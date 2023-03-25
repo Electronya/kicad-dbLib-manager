@@ -1,6 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+from PySide2.QtWidgets import QMessageBox
+
 import os
 import sys
 
@@ -15,6 +17,7 @@ class TestAppComposer(TestCase):
     """
     def setUp(self) -> None:
         self.QAppClass = 'pkgs.appComposer.appComposer.QApplication'
+        self.QMsgBox = 'pkgs.appComposer.appComposer.QMessageBox'
         self.MainWindowClass = 'pkgs.appComposer.appComposer.MainWindow'
         self.sys = 'pkgs.appComposer.appComposer.sys'
         self.loggingMod = 'pkgs.appComposer.appComposer.logging'
@@ -27,7 +30,7 @@ class TestAppComposer(TestCase):
             mockedLoggingMod.getLogger.return_value = self.mockedLogger
             mockedQApplication.return_value = self.QApplication
             mockedAppWindow.return_value = self.AppWindow
-            self.testAppComposer = AppComposer()
+            self.dut = AppComposer()
 
     def tearDown(self) -> None:
         self.mockedLogger.reset_mock()
@@ -71,7 +74,39 @@ class TestAppComposer(TestCase):
         with patch(self.sys) as mockedSys:
             execReturn = 0
             self.QApplication.exec_.return_value = execReturn
-            self.testAppComposer.run()
+            self.dut.run()
             self.AppWindow.show.assert_called_once()
             self.QApplication.exec_.assert_called_once()
             mockedSys.exit.assert_called_once_with(execReturn)
+
+    def test_createErrorMsgBoxLogErr(self) -> None:
+        """
+        The _createErrorMsgBox method must log the error received.
+        """
+        errMsg = 'test error'
+        with patch(self.QMsgBox):
+            self.dut._createErrorMsgBox(QMessageBox.Warning, OSError(errMsg))
+            self.mockedLogger.error.assert_called_once_with(f"{errMsg}")
+
+    def test_createErrorMsgBoxMsgBox(self) -> None:
+        """
+        The _createErrorMsgBox must create, configure and show the error
+        message box and close the application when the error level is critical.
+        """
+        mockedMsgBox = Mock()
+        errMsg = 'test error'
+        icons = [QMessageBox.Warning, QMessageBox.Critical]
+        for icon in icons:
+            mockedMsgBox.reset_mock()
+            with patch(self.QMsgBox) as mockedMsgBoxCls:
+                mockedMsgBoxCls.Warning = QMessageBox.Warning
+                mockedMsgBoxCls.Critical = QMessageBox.Critical
+                mockedMsgBoxCls.return_value = mockedMsgBox
+                self.dut._createErrorMsgBox(icon, OSError(errMsg))
+                mockedMsgBoxCls.assert_called_once()
+                mockedMsgBox.setWindowTitle.assert_called_once_with('Error!!')
+                mockedMsgBox.setText.assert_called_once_with(errMsg)
+                mockedMsgBox.setIcon.assert_called_once_with(icon)
+                if icon == QMessageBox.Critical:
+                    mockedMsgBox.buttonClicked.connect.assert_called_once()
+                mockedMsgBox.exec_.assert_called_once()
