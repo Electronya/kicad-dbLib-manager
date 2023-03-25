@@ -2,4 +2,11 @@
   <qresource prefix="windows">
     <file>icons/app-icon.png</file>
   </qresource>
+  <qresource prefix="tools">
+    <file>icons/new.svg</file>
+    <file>icons/open.svg</file>
+    <file>icons/add.svg</file>
+    <file>icons/delete.svg</file>
+    <file>icons/edit.svg</file>
+  </qresource>
 </RCC>
