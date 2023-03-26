@@ -50,6 +50,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
                              dir=qtc.QDir.homePath(),
                              filter='DB Library (*.kicad_dbl)')
         self._dbLib = DbLibrary(f"{fileInfo[0]}.kicad_dbl", isNew=True)
+        self.actionEditDbLib.setEnabled(True)
         self.dbLibSig.emit(self._dbLib)
 
     @qtc.Slot()

@@ -133,6 +133,14 @@ class TestMainWindow(TestCase):
             mockedDbLib.assert_called_once_with(f"{testFileInfo[0]}.kicad_dbl",
                                                 isNew=True)
 
+    def test_newDbLibFileEnableEdit(self) -> None:
+        """
+        The _newDbLibFile method must enable the DB library edit action.
+        """
+        with patch(self.QFileDialog), patch(self.DbLibrary):
+            self.dut._newDbLibFile()
+            self.dut.actionEditDbLib.setEnabled.assert_called_once_with(True)
+
     def test_newDbLibFileEmitSig(self) -> None:
         """
         The _newDbLibFile method must emit the DB library signal with
