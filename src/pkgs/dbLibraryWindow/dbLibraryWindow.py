@@ -16,5 +16,42 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         super(DbLibraryWindow, self).__init__()
         self._logger = logging.getLogger('app.windows.dbLibrary')
         self._logger.info('loading UI...')
+        self._dbLib = dbLib
         self.setupUi(self)
+        self._setupUi()
+        self._populateUi()
         self._logger.info('UI loaded')
+
+    def _setupUi(self) -> None:
+        """
+        Finalize the UI setup.
+        """
+        self._setupVerUi()
+        self._setupLibInfoUi()
+        self._setupConnUi()
+        self._setupFileInfoUi()
+
+    def _setupVerUi(self) -> None:
+        """
+        Setup the version UI.
+        """
+
+    def _setupLibInfoUi(self) -> None:
+        """
+        Setup the library info UI.
+        """
+
+    def _setupConnUi(self) -> None:
+        """
+        Setup the connection UI.
+        """
+
+    def _setupFileInfoUi(self) -> None:
+        """
+        Setup the file info UI.
+        """
+
+    def _populateUi(self) -> None:
+        """
+        Populate the UI with the DB library information.
+        """
