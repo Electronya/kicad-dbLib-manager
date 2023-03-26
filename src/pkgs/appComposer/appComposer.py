@@ -1,9 +1,11 @@
 import logging
 import sys
 
-from PySide2.QtCore import Slot
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import QApplication, QMessageBox
 
+from ..dbLibrary import DbLibrary
+from ..dbLibraryWindow import DbLibraryWindow
 from ..mainWindow import MainWindow
 
 
@@ -30,11 +32,16 @@ class AppComposer:
         self._mainWindow.show()
         sys.exit(self._app.exec_())
 
-    @Slot()
-    def _openDbLibEditor(self) -> None:
+    @Slot(DbLibrary)
+    def _openDbLibEditor(self, dbLib: DbLibrary) -> None:
         """
         Open the DB library editor.
         """
+        self._logger.info('opening DB library editor')
+        self._dbLibEditor = DbLibraryWindow(dbLib)
+        self._dbLibEditor.errSig.connect(self._createErrorMsgBox)
+        self._dbLibEditor.setWindowModality(Qt.ApplicationModal)
+        self._dbLibEditor.show()
 
     @Slot(QMessageBox.Icon, Exception)
     def _createErrorMsgBox(self, lvl: QMessageBox.Icon,

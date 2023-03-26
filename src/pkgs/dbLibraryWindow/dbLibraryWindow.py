@@ -10,6 +10,8 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
     """
     The DB Library editing window.
     """
+    errSig = qtc.Signal(qtw.QMessageBox.Icon, Exception)
+
     def __init__(self, dbLib) -> None:
         super(DbLibraryWindow, self).__init__()
         self._logger = logging.getLogger('app.windows.dbLibrary')
