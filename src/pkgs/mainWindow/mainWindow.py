@@ -49,7 +49,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
             .getSaveFileName(self, caption='New DB Library',
                              dir=qtc.QDir.homePath(),
                              filter='DB Library (*.kicad_dbl)')
-        self._dbLib = DbLibrary(fileInfo[0], isNew=True)
+        self._dbLib = DbLibrary(f"{fileInfo[0]}.kicad_dbl", isNew=True)
         self.dbLibSig.emit(self._dbLib)
 
     @qtc.Slot()

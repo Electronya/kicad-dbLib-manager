@@ -130,7 +130,8 @@ class TestMainWindow(TestCase):
                 patch(self.DbLibrary) as mockedDbLib:
             mockedFileDialog.getSaveFileName.return_value = testFileInfo
             self.dut._newDbLibFile()
-            mockedDbLib.assert_called_once_with(testFileInfo[0], isNew=True)
+            mockedDbLib.assert_called_once_with(f"{testFileInfo[0]}.kicad_dbl",
+                                                isNew=True)
 
     def test_newDbLibFileEmitSig(self) -> None:
         """
