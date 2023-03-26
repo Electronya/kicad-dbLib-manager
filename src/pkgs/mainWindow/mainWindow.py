@@ -64,6 +64,7 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
                              filter='DB Library (*.kicad_dbl)')
         self._dbLib = DbLibrary(fileInfo[0])
         self.actionEditDbLib.setEnabled(True)
+        self.dbLibSig.emit(self._dbLib)
 
     @qtc.Slot()
     def _editDbLibFile(self) -> None:
