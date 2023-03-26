@@ -41,6 +41,11 @@ _loggingSettings = {
             'handlers': ['console'],
             'propagate': False
         },
+        'app.windows.dbLibrary': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            'propagate': False
+        },
     }
 }
 

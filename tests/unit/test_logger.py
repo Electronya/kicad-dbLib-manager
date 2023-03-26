@@ -30,7 +30,8 @@ class TestLogger(TestCase):
         The _getAppCmptNames function must return the supported
         application component names.
         """
-        expectedRes = ['app', 'app.composer', 'app.windows.main']
+        expectedRes = ['app', 'app.composer', 'app.windows.main',
+                       'app.windows.dbLibrary']
         testResult = dut._getAppCmptNames()
         self.assertEqual(testResult, expectedRes, '_getAppCmptNames failed '
                          'to return the supported app component names.')
