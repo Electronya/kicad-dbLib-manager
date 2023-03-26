@@ -4,7 +4,7 @@
     "description": "A new database of components.",
     "source": {
         "type": "odbc",
-        "dsn": "",
+        "dsn": "test source name",
         "username": "user",
         "password": "password",
         "connection_string": "connection string",

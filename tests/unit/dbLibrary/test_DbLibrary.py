@@ -238,3 +238,129 @@ class TestDbLibrary(TestCase):
         self.assertEqual(self.dut._config['description'], description,
                          'setDescription failed to update the DB library '
                          'description.')
+
+    def test_getSourceType(self) -> None:
+        """
+        The getSourceType method must return the DB library data source type.
+        """
+        type = self.dut.getSourceType()
+        self.assertEqual(type, self.libConfig['source']['type'],
+                         'getSourceType failed to return the DB library '
+                         'data source type.')
+
+    def test_setSourceType(self) -> None:
+        """
+        The setSourceType method must update the DB library data source type.
+        """
+        sourceType = 'test sourceType'
+        self.dut.setSourceType(sourceType)
+        self.assertEqual(self.dut._config['source']['type'], sourceType,
+                         'setSourceType failed to update the DB library '
+                         'data source type.')
+
+    def test_getSourceDsn(self) -> None:
+        """
+        The getSourceDsn method must return the DB library data source name.
+        """
+        dsn = self.dut.getSourceDsn()
+        self.assertEqual(dsn, self.libConfig['source']['dsn'],
+                         'getSourceDsn failed to return the DB library '
+                         'dsn.')
+
+    def test_setSourceDsn(self) -> None:
+        """
+        The setSourceDsn method must update the DB library data source name.
+        """
+        dsn = 'test dsn'
+        self.dut.setSourceDsn(dsn)
+        self.assertEqual(self.dut._config['source']['dsn'], dsn,
+                         'setSourceDsn failed to update the DB library '
+                         'dsn.')
+
+    def test_getSourceUsername(self) -> None:
+        """
+        The getSourceUsername method must return the DB library data source
+        username.
+        """
+        username = self.dut.getSourceUsername()
+        self.assertEqual(username, self.libConfig['source']['username'],
+                         'getSourceUsername failed to return the DB library '
+                         'data source username.')
+
+    def test_setSourceUsername(self) -> None:
+        """
+        The setSourceUsername method must update the DB library data source
+        username.
+        """
+        username = 'test username'
+        self.dut.setSourceUsername(username)
+        self.assertEqual(self.dut._config['source']['username'], username,
+                         'setSourceUsername failed to update the DB library '
+                         'data source username.')
+
+    def test_getSourcePassword(self) -> None:
+        """
+        The getSourcePassword method must return the DB library data source
+        password.
+        """
+        password = self.dut.getSourcePassword()
+        self.assertEqual(password, self.libConfig['source']['password'],
+                         'getSourcePassword failed to return the DB library '
+                         'data source password.')
+
+    def test_setSourcePassword(self) -> None:
+        """
+        The setSourcePassword method must update the DB library data source
+        password.
+        """
+        password = 'test password'
+        self.dut.setSourcePassword(password)
+        self.assertEqual(self.dut._config['source']['password'], password,
+                         'setSourcePassword failed to update the DB library '
+                         'data source password.')
+
+    def test_getSourceConnStr(self) -> None:
+        """
+        The getSourceConnStr method must return the DB library data source
+        connection string.
+        """
+        connStr = self.dut.getSourceConnStr()
+        self.assertEqual(connStr,
+                         self.libConfig['source']['connection_string'],
+                         'getSourceConnStr failed to return the DB library '
+                         'data source connection string.')
+
+    def test_setSourceConnStr(self) -> None:
+        """
+        The setSourceConnStr method must update the DB library data source
+        connection string.
+        """
+        connStr = 'test connection string'
+        self.dut.setSourceConnStr(connStr)
+        self.assertEqual(self.dut._config['source']['connection_string'],
+                         connStr,
+                         'setSourceConnStr failed to update the DB library '
+                         'data source connection string.')
+
+    def test_getSourceTimeout(self) -> None:
+        """
+        The getSourceTimeout method must return the DB library data source
+        timeout.
+        """
+        timeout = self.dut.getSourceTimeout()
+        self.assertEqual(timeout,
+                         self.libConfig['source']['timeout_seconds'],
+                         'getSourceTimeout failed to return the DB library '
+                         'data source timeout.')
+
+    def test_setSourceTimeout(self) -> None:
+        """
+        The setSourceTimeout method must update the DB library data source
+        timeout.
+        """
+        timeout = 32
+        self.dut.setSourceTimeout(timeout)
+        self.assertEqual(self.dut._config['source']['timeout_seconds'],
+                         timeout,
+                         'setSourceTimeout failed to update the DB library '
+                         'data source timeout.')
