@@ -65,3 +65,39 @@ class DbLibrary(QObject):
             version:    The DB library configuration version.
         """
         self._config['meta']['version'] = version
+
+    def getName(self) -> str:
+        """
+        Get the DB library name.
+
+        Return
+            The DB library name.
+        """
+        return self._config['name']
+
+    def setName(self, name: str) -> None:
+        """
+        Set the DB library name.
+
+        Params
+            name:   The DB library name.
+        """
+        self._config['name'] = name
+
+    def getDescription(self) -> str:
+        """
+        Get the DB library description.
+
+        Return
+            The DB library description.
+        """
+        return self._config['description']
+
+    def setDescription(self, description: str) -> None:
+        """
+        Set the DB library description.
+
+        Params:
+            description:    The DB library description.
+        """
+        self._config['description'] = description

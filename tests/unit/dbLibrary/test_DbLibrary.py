@@ -202,3 +202,39 @@ class TestDbLibrary(TestCase):
         self.assertEqual(self.dut._config['meta']['version'], version,
                          'setVersion failed to update the DB library '
                          'configuration version.')
+
+    def test_getName(self) -> None:
+        """
+        The getName method must return the DB library name.
+        """
+        name = self.dut.getName()
+        self.assertEqual(name, self.libConfig['name'],
+                         'getName failed to return the DB library name.')
+
+    def test_setName(self) -> None:
+        """
+        The setName method must update the DB library name.
+        """
+        name = 'test name'
+        self.dut.setName(name)
+        self.assertEqual(self.dut._config['name'], name,
+                         'setName failed to update the DB library name.')
+
+    def test_getDescription(self) -> None:
+        """
+        The getDescription method must return the DB library description.
+        """
+        description = self.dut.getDescription()
+        self.assertEqual(description, self.libConfig['description'],
+                         'getDescription failed to return the DB library '
+                         'description.')
+
+    def test_setDescription(self) -> None:
+        """
+        The setDescription method must update the DB library description.
+        """
+        description = 'test description'
+        self.dut.setDescription(description)
+        self.assertEqual(self.dut._config['description'], description,
+                         'setDescription failed to update the DB library '
+                         'description.')
