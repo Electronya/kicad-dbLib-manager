@@ -41,6 +41,7 @@ class TestDbLibrary(TestCase):
         self.libPath = '/home/jbacon/test'
         with patch.object(DbLibrary, '_openLib'):
             self.dut = DbLibrary(self.libPath)
+        self.dut._config = self.libConfig
 
     def test_constructorCreateNewError(self) -> None:
         """
@@ -180,3 +181,24 @@ class TestDbLibrary(TestCase):
             mockedJsonPkg.load.assert_called_once_with(mockedOpen().__enter__())    # noqa: E501
             self.assertEqual(self.dut._config, self.libConfig,
                              '_openLib failed to load the library config.')
+
+    def test_getVersion(self) -> None:
+        """
+        The getVersion method must return the DB library configuration
+        version.
+        """
+        version = self.dut.getVersion()
+        self.assertEqual(version, self.libConfig['meta']['version'],
+                         'getVersion failed to return the DB library '
+                         'configuration version')
+
+    def test_setVersion(self) -> None:
+        """
+        The setVersion method must update the DB library configuration
+        version with the received one.
+        """
+        version = 32
+        self.dut.setVersion(version)
+        self.assertEqual(self.dut._config['meta']['version'], version,
+                         'setVersion failed to update the DB library '
+                         'configuration version.')

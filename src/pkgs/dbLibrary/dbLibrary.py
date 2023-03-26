@@ -47,3 +47,21 @@ class DbLibrary(QObject):
         """
         with open(self._path) as fd:
             self._config = json.load(fd)
+
+    def getVersion(self) -> int:
+        """
+        Get the DB library configuration version.
+
+        Return
+            The DB library configuration version.
+        """
+        return self._config['meta']['version']
+
+    def setVersion(self, version: int) -> None:
+        """
+        Set the DB library configuration version.
+
+        Params:
+            version:    The DB library configuration version.
+        """
+        self._config['meta']['version'] = version
