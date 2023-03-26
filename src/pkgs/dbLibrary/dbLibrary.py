@@ -13,7 +13,7 @@ class DbLibrary(QObject):
         Constructor.
         """
         QObject.__init__(self)
-        self._path = f"{path}.kicad_dbl"
+        self._path = path
         if isNew:
             self._createNewLib()
         else:
