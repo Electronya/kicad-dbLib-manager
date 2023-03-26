@@ -13,6 +13,7 @@ class DbLibrary(QObject):
         Constructor.
         """
         QObject.__init__(self)
+        self._logger = logging.getLogger('app.library')
         self._path = path
         if isNew:
             self._createNewLib()

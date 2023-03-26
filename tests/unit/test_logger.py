@@ -21,7 +21,7 @@ class TestLogger(TestCase):
         self.argparsePkg = 'logger.argparse'
         self.loggingMod = 'logger.logging'
         self.appCmpts = ['app', 'app.composer', 'app.windows.main',
-                         'app.windows.ctrlr', 'app.windows.ctrlr.model']
+                         'app.windows.dbLibrary', 'app.library']
         self.testArg = Namespace()
         self.testArg.app = None
 
@@ -31,7 +31,7 @@ class TestLogger(TestCase):
         application component names.
         """
         expectedRes = ['app', 'app.composer', 'app.windows.main',
-                       'app.windows.dbLibrary']
+                       'app.windows.dbLibrary', 'app.library']
         testResult = dut._getAppCmptNames()
         self.assertEqual(testResult, expectedRes, '_getAppCmptNames failed '
                          'to return the supported app component names.')

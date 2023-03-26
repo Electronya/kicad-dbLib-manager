@@ -20,6 +20,8 @@ class TestDbLibrary(TestCase):
         The test cases set up.
         """
         self.jsonPkg = 'pkgs.dbLibrary.dbLibrary.json'
+        self.loggingPkg = 'pkgs.dbLibrary.dbLibrary.logging'
+        self.mockedLogger = Mock()
         self.template = {
             'meta': {'version': 0},
             'name': 'New database library',
@@ -39,9 +41,18 @@ class TestDbLibrary(TestCase):
             fd.seek(0)
             self.libConfigStr = fd.read()
         self.libPath = '/home/jbacon/test'
-        with patch.object(DbLibrary, '_openLib'):
+        with patch(self.loggingPkg), patch.object(DbLibrary, '_openLib'):
             self.dut = DbLibrary(self.libPath)
         self.dut._config = self.libConfig
+
+    def test_constructorGetLogger(self) -> None:
+        """
+        The constructor must get the appropriate logger.
+        """
+        with patch(self.loggingPkg) as mockedLogPkg, \
+                patch.object(DbLibrary, '_createNewLib'):
+            DbLibrary(self.libPath, isNew=True)
+            mockedLogPkg.getLogger.assert_called_once_with('app.library')
 
     def test_constructorCreateNewError(self) -> None:
         """
