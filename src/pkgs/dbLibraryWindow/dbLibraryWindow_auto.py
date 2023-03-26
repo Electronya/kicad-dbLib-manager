@@ -19,6 +19,11 @@ class Ui_dbLibWindow(object):
         if not dbLibWindow.objectName():
             dbLibWindow.setObjectName(u"dbLibWindow")
         dbLibWindow.resize(800, 600)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(dbLibWindow.sizePolicy().hasHeightForWidth())
+        dbLibWindow.setSizePolicy(sizePolicy)
         icon = QIcon()
         icon.addFile(u":/windows/icons/app-icon.png", QSize(), QIcon.Normal, QIcon.Off)
         dbLibWindow.setWindowIcon(icon)
@@ -122,6 +127,55 @@ class Ui_dbLibWindow(object):
         self.dbConnInfoGroupBox.setObjectName(u"dbConnInfoGroupBox")
         self.gridLayout_4 = QGridLayout(self.dbConnInfoGroupBox)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.ConnTypeGroupBox = QGroupBox(self.dbConnInfoGroupBox)
+        self.ConnTypeGroupBox.setObjectName(u"ConnTypeGroupBox")
+        self.gridLayout_3 = QGridLayout(self.ConnTypeGroupBox)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.dsnUsrLedit = QLineEdit(self.ConnTypeGroupBox)
+        self.dsnUsrLedit.setObjectName(u"dsnUsrLedit")
+
+        self.gridLayout_3.addWidget(self.dsnUsrLedit, 1, 1, 1, 1)
+
+        self.dsnRbtn = QRadioButton(self.ConnTypeGroupBox)
+        self.dsnRbtn.setObjectName(u"dsnRbtn")
+        self.dsnRbtn.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_3.addWidget(self.dsnRbtn, 0, 0, 1, 1)
+
+        self.dsnPasswordLbl = QLabel(self.ConnTypeGroupBox)
+        self.dsnPasswordLbl.setObjectName(u"dsnPasswordLbl")
+
+        self.gridLayout_3.addWidget(self.dsnPasswordLbl, 2, 0, 1, 1)
+
+        self.dsnUsrLbl = QLabel(self.ConnTypeGroupBox)
+        self.dsnUsrLbl.setObjectName(u"dsnUsrLbl")
+
+        self.gridLayout_3.addWidget(self.dsnUsrLbl, 1, 0, 1, 1)
+
+        self.dsnCbox = QComboBox(self.ConnTypeGroupBox)
+        self.dsnCbox.setObjectName(u"dsnCbox")
+
+        self.gridLayout_3.addWidget(self.dsnCbox, 0, 1, 1, 1)
+
+        self.dsnPasswordLedit = QLineEdit(self.ConnTypeGroupBox)
+        self.dsnPasswordLedit.setObjectName(u"dsnPasswordLedit")
+
+        self.gridLayout_3.addWidget(self.dsnPasswordLedit, 2, 1, 1, 1)
+
+        self.connStrRbtn = QRadioButton(self.ConnTypeGroupBox)
+        self.connStrRbtn.setObjectName(u"connStrRbtn")
+        self.connStrRbtn.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_3.addWidget(self.connStrRbtn, 0, 2, 1, 1)
+
+        self.connStrLedit = QLineEdit(self.ConnTypeGroupBox)
+        self.connStrLedit.setObjectName(u"connStrLedit")
+
+        self.gridLayout_3.addWidget(self.connStrLedit, 1, 2, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.ConnTypeGroupBox, 0, 0, 1, 1)
+
         self.timeoutGroupBox = QGroupBox(self.dbConnInfoGroupBox)
         self.timeoutGroupBox.setObjectName(u"timeoutGroupBox")
         self.gridLayout_7 = QGridLayout(self.timeoutGroupBox)
@@ -134,11 +188,11 @@ class Ui_dbLibWindow(object):
 
         self.timeoutLbl = QLabel(self.timeoutGroupBox)
         self.timeoutLbl.setObjectName(u"timeoutLbl")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.timeoutLbl.sizePolicy().hasHeightForWidth())
-        self.timeoutLbl.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.timeoutLbl.sizePolicy().hasHeightForWidth())
+        self.timeoutLbl.setSizePolicy(sizePolicy1)
 
         self.gridLayout_7.addWidget(self.timeoutLbl, 1, 1, 1, 1)
 
@@ -149,84 +203,12 @@ class Ui_dbLibWindow(object):
         self.gridLayout_7.addWidget(self.timeoutTitleLbl, 0, 0, 1, 2)
 
 
-        self.gridLayout_4.addWidget(self.timeoutGroupBox, 0, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.timeoutGroupBox, 0, 1, 1, 1)
 
         self.connTestPbtn = QPushButton(self.dbConnInfoGroupBox)
         self.connTestPbtn.setObjectName(u"connTestPbtn")
 
-        self.gridLayout_4.addWidget(self.connTestPbtn, 1, 2, 1, 1)
-
-        self.connStrGroupBox = QGroupBox(self.dbConnInfoGroupBox)
-        self.connStrGroupBox.setObjectName(u"connStrGroupBox")
-        self.gridLayout_2 = QGridLayout(self.connStrGroupBox)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.connStrRbtn = QRadioButton(self.connStrGroupBox)
-        self.connStrRbtn.setObjectName(u"connStrRbtn")
-        self.connStrRbtn.setLayoutDirection(Qt.LeftToRight)
-
-        self.gridLayout_2.addWidget(self.connStrRbtn, 0, 0, 1, 2)
-
-        self.connStrLedit = QLineEdit(self.connStrGroupBox)
-        self.connStrLedit.setObjectName(u"connStrLedit")
-
-        self.gridLayout_2.addWidget(self.connStrLedit, 2, 1, 1, 1)
-
-        self.widget = QWidget(self.connStrGroupBox)
-        self.widget.setObjectName(u"widget")
-        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
-        self.widget.setSizePolicy(sizePolicy)
-
-        self.gridLayout_2.addWidget(self.widget, 1, 0, 1, 2)
-
-        self.widget_2 = QWidget(self.connStrGroupBox)
-        self.widget_2.setObjectName(u"widget_2")
-        sizePolicy.setHeightForWidth(self.widget_2.sizePolicy().hasHeightForWidth())
-        self.widget_2.setSizePolicy(sizePolicy)
-
-        self.gridLayout_2.addWidget(self.widget_2, 3, 1, 1, 1)
-
-        self.gridLayout_2.setRowStretch(1, 1)
-        self.gridLayout_2.setRowStretch(3, 1)
-
-        self.gridLayout_4.addWidget(self.connStrGroupBox, 0, 1, 1, 1)
-
-        self.dsnGroupBox = QGroupBox(self.dbConnInfoGroupBox)
-        self.dsnGroupBox.setObjectName(u"dsnGroupBox")
-        self.gridLayout_3 = QGridLayout(self.dsnGroupBox)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.dsnRbtn = QRadioButton(self.dsnGroupBox)
-        self.dsnRbtn.setObjectName(u"dsnRbtn")
-        self.dsnRbtn.setLayoutDirection(Qt.LeftToRight)
-
-        self.gridLayout_3.addWidget(self.dsnRbtn, 0, 0, 1, 1)
-
-        self.dsnUsrLbl = QLabel(self.dsnGroupBox)
-        self.dsnUsrLbl.setObjectName(u"dsnUsrLbl")
-
-        self.gridLayout_3.addWidget(self.dsnUsrLbl, 1, 0, 1, 1)
-
-        self.dsnPasswordLbl = QLabel(self.dsnGroupBox)
-        self.dsnPasswordLbl.setObjectName(u"dsnPasswordLbl")
-
-        self.gridLayout_3.addWidget(self.dsnPasswordLbl, 2, 0, 1, 1)
-
-        self.dsnPasswordLedit = QLineEdit(self.dsnGroupBox)
-        self.dsnPasswordLedit.setObjectName(u"dsnPasswordLedit")
-
-        self.gridLayout_3.addWidget(self.dsnPasswordLedit, 2, 1, 1, 1)
-
-        self.dsnCbox = QComboBox(self.dsnGroupBox)
-        self.dsnCbox.setObjectName(u"dsnCbox")
-
-        self.gridLayout_3.addWidget(self.dsnCbox, 0, 1, 1, 1)
-
-        self.dsnUsrLedit = QLineEdit(self.dsnGroupBox)
-        self.dsnUsrLedit.setObjectName(u"dsnUsrLedit")
-
-        self.gridLayout_3.addWidget(self.dsnUsrLedit, 1, 1, 1, 1)
-
-
-        self.gridLayout_4.addWidget(self.dsnGroupBox, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.connTestPbtn, 1, 1, 1, 1)
 
 
         self.gridLayout_6.addWidget(self.dbConnInfoGroupBox, 1, 0, 1, 2)
@@ -260,15 +242,14 @@ class Ui_dbLibWindow(object):
         self.saveAsPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save As", None))
         self.fileSavePbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save", None))
         self.dbConnInfoGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Connection Information", None))
+        self.ConnTypeGroupBox.setTitle("")
+        self.dsnRbtn.setText(QCoreApplication.translate("dbLibWindow", u"DSN:", None))
+        self.dsnPasswordLbl.setText(QCoreApplication.translate("dbLibWindow", u"Password:", None))
+        self.dsnUsrLbl.setText(QCoreApplication.translate("dbLibWindow", u"Username:", None))
+        self.connStrRbtn.setText(QCoreApplication.translate("dbLibWindow", u"Connection String", None))
         self.timeoutGroupBox.setTitle("")
         self.timeoutLbl.setText(QCoreApplication.translate("dbLibWindow", u"seconds", None))
         self.timeoutTitleLbl.setText(QCoreApplication.translate("dbLibWindow", u"Timeout", None))
         self.connTestPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Test", None))
-        self.connStrGroupBox.setTitle("")
-        self.connStrRbtn.setText(QCoreApplication.translate("dbLibWindow", u"Connection String", None))
-        self.dsnGroupBox.setTitle("")
-        self.dsnRbtn.setText(QCoreApplication.translate("dbLibWindow", u"DSN:", None))
-        self.dsnUsrLbl.setText(QCoreApplication.translate("dbLibWindow", u"Username:", None))
-        self.dsnPasswordLbl.setText(QCoreApplication.translate("dbLibWindow", u"Password:", None))
     # retranslateUi
 
