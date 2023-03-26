@@ -184,7 +184,7 @@ class Ui_dbLibWindow(object):
         self.timeoutSbox.setObjectName(u"timeoutSbox")
         self.timeoutSbox.setValue(2)
 
-        self.gridLayout_7.addWidget(self.timeoutSbox, 1, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.timeoutSbox, 0, 0, 1, 1)
 
         self.timeoutLbl = QLabel(self.timeoutGroupBox)
         self.timeoutLbl.setObjectName(u"timeoutLbl")
@@ -194,13 +194,7 @@ class Ui_dbLibWindow(object):
         sizePolicy1.setHeightForWidth(self.timeoutLbl.sizePolicy().hasHeightForWidth())
         self.timeoutLbl.setSizePolicy(sizePolicy1)
 
-        self.gridLayout_7.addWidget(self.timeoutLbl, 1, 1, 1, 1)
-
-        self.timeoutTitleLbl = QLabel(self.timeoutGroupBox)
-        self.timeoutTitleLbl.setObjectName(u"timeoutTitleLbl")
-        self.timeoutTitleLbl.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_7.addWidget(self.timeoutTitleLbl, 0, 0, 1, 2)
+        self.gridLayout_7.addWidget(self.timeoutLbl, 0, 1, 1, 1)
 
 
         self.gridLayout_4.addWidget(self.timeoutGroupBox, 0, 1, 1, 1)
@@ -242,14 +236,13 @@ class Ui_dbLibWindow(object):
         self.saveAsPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save As", None))
         self.fileSavePbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save", None))
         self.dbConnInfoGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Connection Information", None))
-        self.ConnTypeGroupBox.setTitle("")
+        self.ConnTypeGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Connection Method", None))
         self.dsnRbtn.setText(QCoreApplication.translate("dbLibWindow", u"DSN:", None))
         self.dsnPasswordLbl.setText(QCoreApplication.translate("dbLibWindow", u"Password:", None))
         self.dsnUsrLbl.setText(QCoreApplication.translate("dbLibWindow", u"Username:", None))
         self.connStrRbtn.setText(QCoreApplication.translate("dbLibWindow", u"Connection String", None))
-        self.timeoutGroupBox.setTitle("")
+        self.timeoutGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Connection Timeout", None))
         self.timeoutLbl.setText(QCoreApplication.translate("dbLibWindow", u"seconds", None))
-        self.timeoutTitleLbl.setText(QCoreApplication.translate("dbLibWindow", u"Timeout", None))
         self.connTestPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Test", None))
     # retranslateUi
 
