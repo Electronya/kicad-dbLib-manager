@@ -57,14 +57,20 @@ class TestAppComposer(TestCase):
             AppComposer()
             mockedQApplication.assert_called_once()
 
-    def test_constructorAppWindow(self):
+    def test_constructorMainWindow(self):
         """
-        The constructor must create the AppWindow.
+        The constructor must create the main window and connect to its signals.
         """
+        mockedMainWindow = Mock()
         with patch(self.loggingMod), patch(self.QAppClass), \
-                patch(self.MainWindowClass) as mockedAppWindow:
-            AppComposer()
-            mockedAppWindow.assert_called_once_with()
+                patch(self.MainWindowClass) as mockedMainWindowCls:
+            mockedMainWindowCls.return_value = mockedMainWindow
+            dut = AppComposer()
+            mockedMainWindowCls.assert_called_once_with()
+            mockedMainWindow.errSig.connect \
+                .assert_called_once_with(dut._createErrorMsgBox)
+            mockedMainWindow.dbLibSig.connect \
+                .assert_called_once_with(dut._openDbLibEditor)
 
     def test_run(self):
         """
