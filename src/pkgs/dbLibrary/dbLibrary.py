@@ -1,13 +1,15 @@
 import logging
 import json
 
-from PySide2.QtCore import QObject
+from PySide2.QtCore import QObject, Signal
 
 
 class DbLibrary(QObject):
     """
     The database library class.
     """
+    connTestSig = Signal(str)
+
     def __init__(self, path: str, isNew: bool = False) -> None:
         """
         Constructor.
@@ -62,7 +64,7 @@ class DbLibrary(QObject):
         """
         Set the DB library configuration version.
 
-        Params:
+        Params
             version:    The DB library configuration version.
         """
         self._config['meta']['version'] = version
@@ -98,7 +100,7 @@ class DbLibrary(QObject):
         """
         Set the DB library description.
 
-        Params:
+        Params
             description:    The DB library description.
         """
         self._config['description'] = description
@@ -116,8 +118,8 @@ class DbLibrary(QObject):
         """
         Set the data source type.
 
-        Params:
-            The data source type.
+        Params
+            type:   The data source type.
         """
         self._config['source']['type'] = type
 
@@ -134,8 +136,8 @@ class DbLibrary(QObject):
         """
         Set the data source name.
 
-        Params:
-            The data source name.
+        Params
+            dsn:    The data source name.
         """
         self._config['source']['dsn'] = dsn
 
@@ -152,8 +154,8 @@ class DbLibrary(QObject):
         """
         Set the data source username.
 
-        Params:
-            The data source username.
+        Params
+            username:   The data source username.
         """
         self._config['source']['username'] = username
 
@@ -170,8 +172,8 @@ class DbLibrary(QObject):
         """
         Set the data source password.
 
-        Params:
-            The data source password.
+        Params
+            password:   The data source password.
         """
         self._config['source']['password'] = password
 
@@ -188,8 +190,8 @@ class DbLibrary(QObject):
         """
         Set the data source connection string.
 
-        Params:
-            The data source connection string.
+        Params
+            connStr:    The data source connection string.
         """
         self._config['source']['connection_string'] = connStr
 
@@ -206,7 +208,20 @@ class DbLibrary(QObject):
         """
         Set the data source connection timeout.
 
-        Params:
-            The data source connection timeout.
+        Params
+            timeout:    The data source connection timeout.
         """
         self._config['source']['timeout_seconds'] = timeout
+
+    def testConnection(self) -> None:
+        """
+        Test the library DB connection.
+        """
+
+    def save(self, path: str = None) -> None:
+        """
+        Save the DB library. If a path is given, the library is saved as.
+
+        Params:
+            path:       The new library path if saving as.
+        """
