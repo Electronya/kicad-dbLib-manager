@@ -14,15 +14,15 @@ from PySide2.QtWidgets import *
 
 from ..assets import resources
 
-class Ui_dbLibSettingsWindow(object):
-    def setupUi(self, dbLibSettingsWindow):
-        if not dbLibSettingsWindow.objectName():
-            dbLibSettingsWindow.setObjectName(u"dbLibSettingsWindow")
-        dbLibSettingsWindow.resize(800, 600)
+class Ui_dbLibWindow(object):
+    def setupUi(self, dbLibWindow):
+        if not dbLibWindow.objectName():
+            dbLibWindow.setObjectName(u"dbLibWindow")
+        dbLibWindow.resize(800, 600)
         icon = QIcon()
         icon.addFile(u":/windows/icons/app-icon.png", QSize(), QIcon.Normal, QIcon.Off)
-        dbLibSettingsWindow.setWindowIcon(icon)
-        self.centralwidget = QWidget(dbLibSettingsWindow)
+        dbLibWindow.setWindowIcon(icon)
+        self.centralwidget = QWidget(dbLibWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_6 = QGridLayout(self.centralwidget)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
@@ -231,44 +231,44 @@ class Ui_dbLibSettingsWindow(object):
 
         self.gridLayout_6.addWidget(self.dbConnInfoGroupBox, 1, 0, 1, 2)
 
-        dbLibSettingsWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(dbLibSettingsWindow)
+        dbLibWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QMenuBar(dbLibWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 800, 30))
-        dbLibSettingsWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(dbLibSettingsWindow)
+        dbLibWindow.setMenuBar(self.menubar)
+        self.statusbar = QStatusBar(dbLibWindow)
         self.statusbar.setObjectName(u"statusbar")
-        dbLibSettingsWindow.setStatusBar(self.statusbar)
+        dbLibWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(dbLibSettingsWindow)
+        self.retranslateUi(dbLibWindow)
 
-        QMetaObject.connectSlotsByName(dbLibSettingsWindow)
+        QMetaObject.connectSlotsByName(dbLibWindow)
     # setupUi
 
-    def retranslateUi(self, dbLibSettingsWindow):
-        dbLibSettingsWindow.setWindowTitle(QCoreApplication.translate("dbLibSettingsWindow", u"Database Library Settings", None))
-        self.libInfoGroupBox.setTitle(QCoreApplication.translate("dbLibSettingsWindow", u"Library Information", None))
-        self.verGroupBox.setTitle(QCoreApplication.translate("dbLibSettingsWindow", u"Version", None))
-        self.ver0Rbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Version 0", None))
-        self.ver1Rbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Version 1", None))
+    def retranslateUi(self, dbLibWindow):
+        dbLibWindow.setWindowTitle(QCoreApplication.translate("dbLibWindow", u"Database Library Settings", None))
+        self.libInfoGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Library Information", None))
+        self.verGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Version", None))
+        self.ver0Rbtn.setText(QCoreApplication.translate("dbLibWindow", u"Version 0", None))
+        self.ver1Rbtn.setText(QCoreApplication.translate("dbLibWindow", u"Version 1", None))
         self.infoGroupBox.setTitle("")
-        self.libNameLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Name:", None))
-        self.libDescLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Description:", None))
-        self.closePbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Close", None))
-        self.fileInfoGroupBox.setTitle(QCoreApplication.translate("dbLibSettingsWindow", u"File Information", None))
-        self.filePathLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Path:", None))
-        self.saveAsPbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Save As", None))
-        self.fileSavePbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Save", None))
-        self.dbConnInfoGroupBox.setTitle(QCoreApplication.translate("dbLibSettingsWindow", u"Connection Information", None))
+        self.libNameLbl.setText(QCoreApplication.translate("dbLibWindow", u"Name:", None))
+        self.libDescLbl.setText(QCoreApplication.translate("dbLibWindow", u"Description:", None))
+        self.closePbtn.setText(QCoreApplication.translate("dbLibWindow", u"Close", None))
+        self.fileInfoGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"File Information", None))
+        self.filePathLbl.setText(QCoreApplication.translate("dbLibWindow", u"Path:", None))
+        self.saveAsPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save As", None))
+        self.fileSavePbtn.setText(QCoreApplication.translate("dbLibWindow", u"Save", None))
+        self.dbConnInfoGroupBox.setTitle(QCoreApplication.translate("dbLibWindow", u"Connection Information", None))
         self.timeoutGroupBox.setTitle("")
-        self.timeoutLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"seconds", None))
-        self.timeoutTitleLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Timeout", None))
-        self.connTestPbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Test", None))
+        self.timeoutLbl.setText(QCoreApplication.translate("dbLibWindow", u"seconds", None))
+        self.timeoutTitleLbl.setText(QCoreApplication.translate("dbLibWindow", u"Timeout", None))
+        self.connTestPbtn.setText(QCoreApplication.translate("dbLibWindow", u"Test", None))
         self.connStrGroupBox.setTitle("")
-        self.connStrRbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Connection String", None))
+        self.connStrRbtn.setText(QCoreApplication.translate("dbLibWindow", u"Connection String", None))
         self.dsnGroupBox.setTitle("")
-        self.dsnRbtn.setText(QCoreApplication.translate("dbLibSettingsWindow", u"DSN:", None))
-        self.dsnUsrLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Username:", None))
-        self.dsnPasswordLbl.setText(QCoreApplication.translate("dbLibSettingsWindow", u"Password:", None))
+        self.dsnRbtn.setText(QCoreApplication.translate("dbLibWindow", u"DSN:", None))
+        self.dsnUsrLbl.setText(QCoreApplication.translate("dbLibWindow", u"Username:", None))
+        self.dsnPasswordLbl.setText(QCoreApplication.translate("dbLibWindow", u"Password:", None))
     # retranslateUi
 
