@@ -56,5 +56,5 @@ class AppComposer:
         msgBox.setIcon(lvl)
         if lvl == QMessageBox.Critical:
             self._logger.debug('connecting to button clicked for critical')
-            msgBox.buttonClicked.connect(lambda i: sys.exit(1))
+            msgBox.buttonClicked.connect(lambda: sys.exit(1))
         msgBox.exec_()
