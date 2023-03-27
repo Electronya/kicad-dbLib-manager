@@ -213,7 +213,7 @@ class DbLibrary(QObject):
         """
         self._config['source']['timeout_seconds'] = timeout
 
-    def getOdbcDsnList(self) -> tuple[str]:
+    def getOdbcDsnList(self) -> tuple:
         """
         Get the system active ODBC DSN list.
 
