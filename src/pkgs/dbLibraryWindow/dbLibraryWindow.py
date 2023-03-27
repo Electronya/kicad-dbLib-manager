@@ -83,6 +83,59 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         Populate the UI with the DB library information.
         """
+        self._populateVerUi()
+        self._populateLibInfoUi()
+        self._populateConnUi()
+        self._populateFileInfoUi()
+
+    def _populateVerUi(self) -> None:
+        """
+        Populate the version UI.
+        """
+        radioBtns = (self.ver0Rbtn, self.ver1Rbtn)
+        version = self._dbLib.getVersion()
+        self._logger.debug(f"populating UI with version: {version}")
+        radioBtns[version].setChecked()
+
+    def _populateLibInfoUi(self) -> None:
+        """
+        Populate the library info UI.
+        """
+        name = self._dbLib.getName()
+        description = self._dbLib.getDescription()
+        self._logger.debug(f"populating UI with name: {name} and "
+                           f"{description}")
+        self.libNameLedit.setText(name)
+        self.libDescLedit.setText(description)
+
+    def _populateConnUi(self) -> None:
+        """
+        Populate the connection UI.
+        """
+        dsnList = self._dbLib.getOdbcDsnList()
+        dsn = self._dbLib.getSourceDsn()
+        user = self._dbLib.getSourceUsername()
+        password = self._dbLib.getSourcePassword()
+        connStr = self._dbLib.getSourceConnStr()
+        timeout = self._dbLib.getSourceTimeout()
+        if not connStr:
+            self.dsnRbtn.setChecked()
+        else:
+            self.connStrRbtn.setChecked()
+        self.dsnCbox.addItems(dsnList)
+        for odbcDsn in dsnList:
+            if odbcDsn == dsn:
+                item = odbcDsn
+        self.dsnCbox.setCurrentItem(item)
+        self.dsnUsrLedit.setText(user)
+        self.dsnPasswordLedit.setText(password)
+        self.connStrLedit.setText(connStr)
+        self.timeoutSbox.setValue(timeout)
+
+    def _populateFileInfoUi(self) -> None:
+        """
+        Populate the file info UI.
+        """
 
     @qtc.Slot(str)
     def _updateConnectionUi(self, connType: str) -> None:

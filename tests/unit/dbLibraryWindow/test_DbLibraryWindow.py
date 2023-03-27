@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import Mock, patch
+from unittest.mock import call, Mock, patch
 
 from PySide2.QtCore import Qt
 
@@ -180,3 +180,78 @@ class TestDbLibraryWindow(TestCase):
         self.dut.fileSavePbtn.clicked.connect.assert_called_once()
         self.dut.saveAsPbtn.clicked.connect \
             .assert_called_once_with(self.dut._saveLibAs)
+
+    def test_populateUi(self) -> None:
+        """
+        The _populateUi method must populate all the UI sections.
+        """
+        with patch.object(self.dut, '_populateVerUi') as mockedVerUi, \
+                patch.object(self.dut, '_populateLibInfoUi') as mockedLibUi, \
+                patch.object(self.dut, '_populateConnUi') as mockedConnUi, \
+                patch.object(self.dut, '_populateFileInfoUi') as mockedFileUi:
+            self.dut._populateUi()
+            mockedVerUi.assert_called_once()
+            mockedLibUi.assert_called_once()
+            mockedConnUi.assert_called_once()
+            mockedFileUi.assert_called_once()
+
+    def test_populateVerUi(self) -> None:
+        """
+        The _populateVerUi method must select the DB library version radio
+        button.
+        """
+        versions = (0, 1)
+        radioBtns = (self.dut.ver0Rbtn, self.dut.ver1Rbtn)
+        for version in versions:
+            self.dut._dbLib.getVersion.return_value = version
+            self.dut._populateVerUi()
+            radioBtns[version].setChecked.assert_called_once()
+
+    def test_populateLebInfoUi(self) -> None:
+        """
+        The _populateLibInfoUi method must populate the library name
+        and description line edit.
+        """
+        name = 'test name'
+        description = 'test description'
+        self.dut._dbLib.getName.return_value = name
+        self.dut._dbLib.getDescription.return_value = description
+        self.dut._populateLibInfoUi()
+        self.dut.libNameLedit.setText.assert_called_once_with(name)
+        self.dut.libDescLedit.setText.assert_called_once_with(description)
+
+    def test_populateConnUi(self) -> None:
+        """
+        The _populateConnUi method must select the right connection type
+        based on the connection string and than populate the connection section
+        based from the library connection data.
+        """
+        dsnList = ('dsn 1', 'dsn 2', 'dsn 3')
+        dsn = dsnList[1]
+        dsnUser = 'test user'
+        dsnPsw = 'test password'
+        connStrings = ('', 'test connection string')
+        timeout = 32
+        for connStr in connStrings:
+            self.dut.dsnCbox.reset_mock()
+            self.dut.dsnUsrLedit.reset_mock()
+            self.dut.dsnPasswordLedit.reset_mock()
+            self.dut.connStrLedit.reset_mock()
+            self.dut.timeoutSbox.reset_mock()
+            self.dut._dbLib.getOdbcDsnList.return_value = dsnList
+            self.dut._dbLib.getSourceDsn.return_value = dsn
+            self.dut._dbLib.getSourceUsername.return_value = dsnUser
+            self.dut._dbLib.getSourcePassword.return_value = dsnPsw
+            self.dut._dbLib.getSourceConnStr.return_value = connStr
+            self.dut._dbLib.getSourceTimeout.return_value = timeout
+            self.dut._populateConnUi()
+            if not connStr:
+                self.dut.dsnRbtn.setChecked.assert_called_once()
+            else:
+                self.dut.connStrRbtn.setChecked.assert_called_once()
+            self.dut.dsnCbox.addItems.assert_called_once_with(dsnList)
+            self.dut.dsnCbox.setCurrentItem.assert_called_once_with(dsn)
+            self.dut.dsnUsrLedit.setText.assert_called_once_with(dsnUser)
+            self.dut.dsnPasswordLedit.setText.assert_called_once_with(dsnPsw)
+            self.dut.connStrLedit.setText.assert_called_once_with(connStr)
+            self.dut.timeoutSbox.setValue.assert_called_once_with(timeout)
