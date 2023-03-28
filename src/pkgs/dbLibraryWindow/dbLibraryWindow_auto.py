@@ -105,7 +105,8 @@ class Ui_dbLibWindow(object):
 
         self.filePathLedit = QLineEdit(self.fileInfoGroupBox)
         self.filePathLedit.setObjectName(u"filePathLedit")
-        self.filePathLedit.setEnabled(False)
+        self.filePathLedit.setEnabled(True)
+        self.filePathLedit.setReadOnly(True)
 
         self.gridLayout_5.addWidget(self.filePathLedit, 0, 1, 1, 3)
 
