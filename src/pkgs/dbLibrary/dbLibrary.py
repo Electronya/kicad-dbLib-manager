@@ -51,6 +51,15 @@ class DbLibrary(QObject):
         with open(self._path) as fd:
             self._config = json.load(fd)
 
+    def getPath(self) -> str:
+        """
+        Get the library path.
+
+        Return
+            The library file path.
+        """
+        return self._path
+
     def getVersion(self) -> int:
         """
         Get the DB library configuration version.
@@ -220,6 +229,7 @@ class DbLibrary(QObject):
         Return
             A tuple containing the system ODBC DSN list.
         """
+        return ()
 
     def testConnection(self) -> None:
         """

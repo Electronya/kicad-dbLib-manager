@@ -95,7 +95,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         radioBtns = (self.ver0Rbtn, self.ver1Rbtn)
         version = self._dbLib.getVersion()
         self._logger.debug(f"populating UI with version: {version}")
-        radioBtns[version].setChecked()
+        radioBtns[version].setChecked(True)
 
     def _populateLibInfoUi(self) -> None:
         """
@@ -119,14 +119,13 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         connStr = self._dbLib.getSourceConnStr()
         timeout = self._dbLib.getSourceTimeout()
         if not connStr:
-            self.dsnRbtn.setChecked()
+            self.dsnRbtn.setChecked(True)
         else:
-            self.connStrRbtn.setChecked()
+            self.connStrRbtn.setChecked(True)
         self.dsnCbox.addItems(dsnList)
-        for odbcDsn in dsnList:
-            if odbcDsn == dsn:
-                item = odbcDsn
-        self.dsnCbox.setCurrentItem(item)
+        dsnIdx = self.dsnCbox.findText(dsn, qtc.Qt.MatchFixedString)
+        if dsnIdx > 0:
+            self.dsnCbox.setCurrentIndex(dsnIdx)
         self.dsnUsrLedit.setText(user)
         self.dsnPasswordLedit.setText(password)
         self.connStrLedit.setText(connStr)
@@ -136,6 +135,8 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         Populate the file info UI.
         """
+        path = self._dbLib.getPath()
+        self.filePathLedit.setText(path)
 
     @qtc.Slot(str)
     def _updateConnectionUi(self, connType: str) -> None:

@@ -36,7 +36,7 @@ class TestDbLibrary(TestCase):
             },
             'libraries': [],
         }
-        with open(('./tests/unit/dbLibrary/testDbLib.kicad_dbl')) as fd:
+        with open('./tests/unit/dbLibrary/testDbLib.kicad_dbl') as fd:
             self.libConfig = json.load(fd)
             fd.seek(0)
             self.libConfigStr = fd.read()
@@ -192,6 +192,14 @@ class TestDbLibrary(TestCase):
             mockedJsonPkg.load.assert_called_once_with(mockedOpen().__enter__())    # noqa: E501
             self.assertEqual(self.dut._config, self.libConfig,
                              '_openLib failed to load the library config.')
+
+    def test_getPath(self) -> None:
+        """
+        The getPath method must return the DB Library file path.
+        """
+        path = self.dut.getPath()
+        self.assertEqual(path, self.libPath,
+                         'getPath failed to return the DB library file path.')
 
     def test_getVersion(self) -> None:
         """
