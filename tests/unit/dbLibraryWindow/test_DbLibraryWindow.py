@@ -28,7 +28,8 @@ class TestDbLibraryWindow(TestCase):
         with patch(self.QMainWindow), patch(self.loggingMod) as mockedLogMod, \
                 patch.object(DbLibraryWindow, 'setupUi'), \
                 patch.object(DbLibraryWindow, '_setupUi'), \
-                patch.object(DbLibraryWindow, '_populateUi'):
+                patch.object(DbLibraryWindow, '_populateUi'), \
+                patch.object(DbLibraryWindow, 'installEventFilter'):
             mockedLogMod.getLogger.return_value = self.mockedLogger
             self.dut = DbLibraryWindow(self.mockedDbLib)
         self._setUpMockedWidget()
@@ -61,7 +62,8 @@ class TestDbLibraryWindow(TestCase):
         with patch(self.QMainWindow), patch(self.loggingMod) as mockedLogMod, \
                 patch.object(DbLibraryWindow, 'setupUi'), \
                 patch.object(DbLibraryWindow, '_setupUi'), \
-                patch.object(DbLibraryWindow, '_populateUi'):
+                patch.object(DbLibraryWindow, '_populateUi'), \
+                patch.object(DbLibraryWindow, 'installEventFilter'):
             DbLibraryWindow(self.mockedDbLib)
             mockedLogMod.getLogger \
                 .assert_called_once_with('app.windows.dbLibrary')
@@ -73,11 +75,25 @@ class TestDbLibraryWindow(TestCase):
         with patch(self.QMainWindow), patch(self.loggingMod), \
                 patch.object(DbLibraryWindow, 'setupUi') as mockedWinSetupUi, \
                 patch.object(DbLibraryWindow, '_setupUi') as mockedSetupUi, \
-                patch.object(DbLibraryWindow, '_populateUi') as mockedPopUi:
+                patch.object(DbLibraryWindow, '_populateUi') as mockedPopUi, \
+                patch.object(DbLibraryWindow, 'installEventFilter'):
             dut = DbLibraryWindow(self.mockedDbLib)
             mockedWinSetupUi.assert_called_once_with(dut)
             mockedSetupUi.assert_called_once()
             mockedPopUi.assert_called_once()
+
+    def test_constructorInstallEventFilter(self) -> None:
+        """
+        The constructor must install the event filter.
+        """
+        with patch(self.QMainWindow), patch(self.loggingMod), \
+                patch.object(DbLibraryWindow, 'setupUi'), \
+                patch.object(DbLibraryWindow, '_setupUi'), \
+                patch.object(DbLibraryWindow, '_populateUi'), \
+                patch.object(DbLibraryWindow, 'installEventFilter') \
+                as mockedEvFilter:
+            dut = DbLibraryWindow(self.mockedDbLib)
+            mockedEvFilter.assert_called_once_with(dut)
 
     def test_setupUiSetupGroupBox(self) -> None:
         """
@@ -109,14 +125,14 @@ class TestDbLibraryWindow(TestCase):
 
     def test_setupVerUi(self) -> None:
         """
-        The _setupVerUi method must connect the version radio buttons toggle
+        The _setupVerUi method must connect the version radio buttons clicked
         signals.
         """
         self.dut.ver0Rbtn.text.return_value = 'Version 0'
         self.dut.ver1Rbtn.text.return_value = 'Version 1'
         self.dut._setupVerUi()
-        self.dut.ver0Rbtn.toggled.connect.assert_called_once()
-        self.dut.ver1Rbtn.toggled.connect.assert_called_once()
+        self.dut.ver0Rbtn.clicked.connect.assert_called_once()
+        self.dut.ver1Rbtn.clicked.connect.assert_called_once()
 
     def test_setupLibInfoUi(self) -> None:
         """
@@ -130,11 +146,11 @@ class TestDbLibraryWindow(TestCase):
     def test_setupConnUiTypeRadioBtn(self) -> None:
         """
         The _setupConnUi method must connect the connection type radio button
-        toggled signals.
+        clicked signals.
         """
         self.dut._setupConnUi()
-        self.dut.dsnRbtn.toggled.connect.assert_called_once()
-        self.dut.connStrRbtn.toggled.connect.assert_called_once()
+        self.dut.dsnRbtn.clicked.connect.assert_called_once()
+        self.dut.connStrRbtn.clicked.connect.assert_called_once()
 
     def test_setupConnUiLineEdit(self) -> None:
         """

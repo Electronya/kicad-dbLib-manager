@@ -21,6 +21,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         self.setupUi(self)
         self._setupUi()
         self._populateUi()
+        self.installEventFilter(self)
         self._logger.info('UI loaded')
 
     def _setupUi(self) -> None:
@@ -39,8 +40,8 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         ver0 = int(self.ver0Rbtn.text().split()[-1])
         ver1 = int(self.ver1Rbtn.text().split()[-1])
-        self.ver0Rbtn.toggled.connect(lambda: self._dbLib.setVersion(ver0))
-        self.ver1Rbtn.toggled.connect(lambda: self._dbLib.setVersion(ver1))
+        self.ver0Rbtn.clicked.connect(lambda: self._dbLib.setVersion(ver0))
+        self.ver1Rbtn.clicked.connect(lambda: self._dbLib.setVersion(ver1))
 
     def _setupLibInfoUi(self) -> None:
         """
@@ -57,8 +58,8 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         dsnType = 'dsn'
         connStrType = 'connStr'
-        self.dsnRbtn.toggled.connect(lambda: self._updateConnectionUi(dsnType))
-        self.connStrRbtn.toggled \
+        self.dsnRbtn.clicked.connect(lambda: self._updateConnectionUi(dsnType))
+        self.connStrRbtn.clicked \
             .connect(lambda: self._updateConnectionUi(connStrType))
         self.dsnUsrLedit.editingFinished \
             .connect(lambda: self._dbLib.setSourceUsername(self.dsnUsrLedit.text()))        # noqa: E501
@@ -146,6 +147,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         Params:
             connType:   The connection type selected.
         """
+        self._logger.debug('updating connection UI')
 
     @qtc.Slot(qtw.QMessageBox.Icon, str)
     def _showConnTestResult(self, icon: qtw.QMessageBox.Icon,
