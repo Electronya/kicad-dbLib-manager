@@ -42,6 +42,7 @@ class DbLibrary(QObject):
         }
         with open(self._path, 'w') as fd:
             self._config = template
+            self._savedConfig = self._config.copy()
             json.dump(template, fd, indent=4)
 
     def _openLib(self) -> None:
@@ -50,6 +51,7 @@ class DbLibrary(QObject):
         """
         with open(self._path) as fd:
             self._config = json.load(fd)
+            self._savedConfig = self._config.copy()
 
     def isSaved(self) -> bool:
         """
@@ -58,11 +60,13 @@ class DbLibrary(QObject):
         Return
             True if any and all changes have been saved, False otherwise.
         """
+        return self._config == self._savedConfig
 
     def discardChanges(self) -> None:
         """
         Discard any and all unsaved changes.
         """
+        self._config = self._savedConfig.copy()
 
     def getPath(self) -> str:
         """

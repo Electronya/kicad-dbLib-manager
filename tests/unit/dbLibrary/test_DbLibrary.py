@@ -44,6 +44,7 @@ class TestDbLibrary(TestCase):
         with patch(self.loggingPkg), patch.object(DbLibrary, '_openLib'):
             self.dut = DbLibrary(self.libPath)
         self.dut._config = self.libConfig
+        self.dut._savedConfig = self.libConfig.copy()
 
     def test_constructorGetLogger(self) -> None:
         """
@@ -147,6 +148,9 @@ class TestDbLibrary(TestCase):
             self.assertEqual(self.dut._config, self.template,
                              '_createNewLib failed to save the template '
                              'config.')
+            self.assertEqual(self.dut._config, self.dut._savedConfig,
+                             '_createNewLib failed to copy the configuration '
+                             'for change management.')
 
     def test_openLibOpenFileError(self) -> None:
         """
@@ -192,6 +196,39 @@ class TestDbLibrary(TestCase):
             mockedJsonPkg.load.assert_called_once_with(mockedOpen().__enter__())    # noqa: E501
             self.assertEqual(self.dut._config, self.libConfig,
                              '_openLib failed to load the library config.')
+            self.assertEqual(self.dut._config, self.dut._savedConfig,
+                             '_createNewLib failed to copy the configuration '
+                             'for change management.')
+
+    def test_isSavedChangesSaved(self) -> None:
+        """
+        The isSaved method must return true if any and all configuration
+        changes have been saved.
+        """
+        result = self.dut.isSaved()
+        self.assertTrue(result, 'isSaved failed to return true when any and '
+                        'all changes have been saved.')
+
+    def test_isSavedChangesUnsaved(self) -> None:
+        """
+        The isSaved method must return false if the library have unsaved
+        changes in its configuration.
+        """
+        self.dut._config['name'] = 'new name'
+        result = self.dut.isSaved()
+        self.assertFalse(result, 'isSaved failed to return false when there '
+                         'is unsaved changes.')
+
+    def test_discardChanges(self) -> None:
+        """
+        The discardChanges method must discard any and all unsaved changes.
+        """
+        self.dut._config['name'] = 'new name'
+        self.dut._config['source']['dsn'] = 'new dsn name'
+        self.dut.discardChanges()
+        self.assertTrue(self.dut._config == self.dut._savedConfig,
+                        'discardChanges failed to discard any and all unsaved '
+                        'configuration changes.')
 
     def test_getPath(self) -> None:
         """
