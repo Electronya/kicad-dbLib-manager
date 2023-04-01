@@ -24,6 +24,8 @@ class TestDbLibraryWindow(TestCase):
             'pkgs.dbLibraryWindow.dbLibraryWindow.qtw.QMainWindow.__init__'
         self.QMessageBox = \
             'pkgs.dbLibraryWindow.dbLibraryWindow.qtw.QMessageBox'
+        self.QFileDialog = \
+            'pkgs.dbLibraryWindow.dbLibraryWindow.qtw.QFileDialog'
         self.DbLibrary = 'pkgs.dbLibraryWindow.dbLibraryWindow.DbLibrary'
         self.loggingMod = 'pkgs.dbLibraryWindow.dbLibraryWindow.logging'
         self.mockedLogger = Mock()
@@ -337,3 +339,21 @@ class TestDbLibraryWindow(TestCase):
                     .assert_called_once_with('Test Result')
                 mockedMsgBox.setText.assert_called_once_with(messages[idx])
                 mockedMsgBox.setIcon.assert_called_once_with(icon)
+
+    def test_saveLibAs(self) -> None:
+        """
+        The _saveLibAs method must open a save dialog window that allow
+        the user to save as the current library.
+        """
+        baseLibPath = 'path/to/library.kicad_dbl'
+        newLibPath = 'new/path/library'
+        self.mockedDbLib.getPath.return_value = baseLibPath
+        with patch(self.QFileDialog) as mockedFileDialog:
+            mockedFileDialog.getSaveFileName.return_value = (newLibPath, '')
+            self.dut._saveLibAs()
+            mockedFileDialog.getSaveFileName \
+                .assert_called_once_with(self.dut, caption='Save Library As',
+                                         dir=baseLibPath,
+                                         filter='DB Library (*.kicad_dbl)')
+            self.dut._dbLib.save \
+                .assert_called_once_with(path=f"{newLibPath}.kicad_dbl")

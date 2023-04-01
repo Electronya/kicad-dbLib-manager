@@ -174,6 +174,12 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         Save the DB library as.
         """
+        self._logger.debug('saving as library')
+        fileInfo = qtw.QFileDialog \
+            .getSaveFileName(self, caption='Save Library As',
+                             dir=self._dbLib.getPath(),
+                             filter='DB Library (*.kicad_dbl)')
+        self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
 
     @qtc.Slot()
     def _close(self) -> None:
