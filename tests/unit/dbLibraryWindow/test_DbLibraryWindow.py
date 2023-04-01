@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import call, Mock, patch
 
 from PySide2.QtCore import Qt
+import PySide2.QtWidgets as qtw
 
 import os
 import sys
@@ -21,6 +22,8 @@ class TestDbLibraryWindow(TestCase):
         """
         self.QMainWindow = \
             'pkgs.dbLibraryWindow.dbLibraryWindow.qtw.QMainWindow.__init__'
+        self.QMessageBox = \
+            'pkgs.dbLibraryWindow.dbLibraryWindow.qtw.QMessageBox'
         self.DbLibrary = 'pkgs.dbLibraryWindow.dbLibraryWindow.DbLibrary'
         self.loggingMod = 'pkgs.dbLibraryWindow.dbLibraryWindow.logging'
         self.mockedLogger = Mock()
@@ -314,3 +317,23 @@ class TestDbLibraryWindow(TestCase):
                 .assert_called_once_with(widgetStates[idx][0])
             self.dut.connStrLedit.setEnabled \
                 .assert_called_once_with(widgetStates[idx][1])
+
+    def test_showConnTestResultMessageBox(self) -> None:
+        """
+        The _showConnTestResult method must open a message box with the given
+        icon and message.
+        """
+        icons = (qtw.QMessageBox.Warning, qtw.QMessageBox.Information)
+        messages = ('Unable to connect to database.',
+                    'Connection successful.')
+        mockedMsgBox = Mock()
+        for idx, icon in enumerate(icons):
+            mockedMsgBox.reset_mock()
+            with patch(self.QMessageBox) as mockedMsgBoxCls:
+                mockedMsgBoxCls.return_value = mockedMsgBox
+                self.dut._showConnTestResult(icon, messages[idx])
+                mockedMsgBoxCls.assert_called_once()
+                mockedMsgBox.setWindowTitle \
+                    .assert_called_once_with('Test Result')
+                mockedMsgBox.setText.assert_called_once_with(messages[idx])
+                mockedMsgBox.setIcon.assert_called_once_with(icon)

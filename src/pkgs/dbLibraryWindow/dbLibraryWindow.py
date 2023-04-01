@@ -163,6 +163,11 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
             icon:       The connection test icon.
             resMsg:     The connection test result message.
         """
+        msgBox = qtw.QMessageBox()
+        msgBox.setWindowTitle('Test Result')
+        msgBox.setText(resMsg)
+        msgBox.setIcon(icon)
+        msgBox.exec_()
 
     @qtc.Slot()
     def _saveLibAs(self) -> None:
