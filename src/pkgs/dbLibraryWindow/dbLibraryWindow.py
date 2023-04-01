@@ -56,11 +56,9 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         Setup the connection UI.
         """
-        dsnType = 'dsn'
-        connStrType = 'connStr'
-        self.dsnRbtn.clicked.connect(lambda: self._updateConnectionUi(dsnType))
+        self.dsnRbtn.clicked.connect(lambda: self._updateConnectionUi(True))
         self.connStrRbtn.clicked \
-            .connect(lambda: self._updateConnectionUi(connStrType))
+            .connect(lambda: self._updateConnectionUi(False))
         self.dsnUsrLedit.editingFinished \
             .connect(lambda: self._dbLib.setSourceUsername(self.dsnUsrLedit.text()))        # noqa: E501
         self.dsnPasswordLedit.editingFinished \
@@ -121,8 +119,10 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         timeout = self._dbLib.getSourceTimeout()
         if not connStr:
             self.dsnRbtn.setChecked(True)
+            self._updateConnectionUi(True)
         else:
             self.connStrRbtn.setChecked(True)
+            self._updateConnectionUi(False)
         self.dsnCbox.addItems(dsnList)
         dsnIdx = self.dsnCbox.findText(dsn, qtc.Qt.MatchFixedString)
         if dsnIdx > 0:
@@ -140,14 +140,18 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         self.filePathLedit.setText(path)
 
     @qtc.Slot(str)
-    def _updateConnectionUi(self, connType: str) -> None:
+    def _updateConnectionUi(self, isDsn: bool) -> None:
         """
         Update the connection UI base on the type selected.
 
         Params:
-            connType:   The connection type selected.
+            isDsn:      The DSN connection type flag.
         """
         self._logger.debug('updating connection UI')
+        self.dsnCbox.setEnabled(isDsn)
+        self.dsnUsrLedit.setEnabled(isDsn)
+        self.dsnPasswordLedit.setEnabled(isDsn)
+        self.connStrLedit.setEnabled(not isDsn)
 
     @qtc.Slot(qtw.QMessageBox.Icon, str)
     def _showConnTestResult(self, icon: qtw.QMessageBox.Icon,

@@ -250,32 +250,38 @@ class TestDbLibraryWindow(TestCase):
         connStrings = ('', 'test connection string')
         timeout = 32
         dsnIdxes = (-1, 1)
-        for idx, connStr in enumerate(connStrings):
-            self.dut.dsnCbox.reset_mock()
-            self.dut.dsnUsrLedit.reset_mock()
-            self.dut.dsnPasswordLedit.reset_mock()
-            self.dut.connStrLedit.reset_mock()
-            self.dut.timeoutSbox.reset_mock()
-            self.dut._dbLib.getOdbcDsnList.return_value = dsnList
-            self.dut._dbLib.getSourceDsn.return_value = dsn
-            self.dut._dbLib.getSourceUsername.return_value = dsnUser
-            self.dut._dbLib.getSourcePassword.return_value = dsnPsw
-            self.dut._dbLib.getSourceConnStr.return_value = connStr
-            self.dut._dbLib.getSourceTimeout.return_value = timeout
-            self.dut.dsnCbox.findText.return_value = dsnIdxes[idx]
-            self.dut._populateConnUi()
-            if not connStr:
-                self.dut.dsnRbtn.setChecked.assert_called_once_with(True)
-            else:
-                self.dut.connStrRbtn.setChecked.assert_called_once_with(True)
-            self.dut.dsnCbox.addItems.assert_called_once_with(dsnList)
-            if dsnIdxes[idx] > 0:
-                self.dut.dsnCbox.setCurrentIndex \
-                    .assert_called_once_with(dsnIdxes[idx])
-            self.dut.dsnUsrLedit.setText.assert_called_once_with(dsnUser)
-            self.dut.dsnPasswordLedit.setText.assert_called_once_with(dsnPsw)
-            self.dut.connStrLedit.setText.assert_called_once_with(connStr)
-            self.dut.timeoutSbox.setValue.assert_called_once_with(timeout)
+        with patch.object(self.dut, '_updateConnectionUi') as mockedUpdateUi:
+            for idx, connStr in enumerate(connStrings):
+                mockedUpdateUi.reset_mock()
+                self.dut.dsnCbox.reset_mock()
+                self.dut.dsnUsrLedit.reset_mock()
+                self.dut.dsnPasswordLedit.reset_mock()
+                self.dut.connStrLedit.reset_mock()
+                self.dut.timeoutSbox.reset_mock()
+                self.dut._dbLib.getOdbcDsnList.return_value = dsnList
+                self.dut._dbLib.getSourceDsn.return_value = dsn
+                self.dut._dbLib.getSourceUsername.return_value = dsnUser
+                self.dut._dbLib.getSourcePassword.return_value = dsnPsw
+                self.dut._dbLib.getSourceConnStr.return_value = connStr
+                self.dut._dbLib.getSourceTimeout.return_value = timeout
+                self.dut.dsnCbox.findText.return_value = dsnIdxes[idx]
+                self.dut._populateConnUi()
+                if not connStr:
+                    self.dut.dsnRbtn.setChecked.assert_called_once_with(True)
+                    mockedUpdateUi.asser_called_once_with(True)
+                else:
+                    self.dut.connStrRbtn.setChecked \
+                        .assert_called_once_with(True)
+                    mockedUpdateUi.assert_called_once_with(False)
+                self.dut.dsnCbox.addItems.assert_called_once_with(dsnList)
+                if dsnIdxes[idx] > 0:
+                    self.dut.dsnCbox.setCurrentIndex \
+                        .assert_called_once_with(dsnIdxes[idx])
+                self.dut.dsnUsrLedit.setText.assert_called_once_with(dsnUser)
+                self.dut.dsnPasswordLedit.setText \
+                    .assert_called_once_with(dsnPsw)
+                self.dut.connStrLedit.setText.assert_called_once_with(connStr)
+                self.dut.timeoutSbox.setValue.assert_called_once_with(timeout)
 
     def test_populateFileInfoUi(self) -> None:
         """
@@ -286,3 +292,25 @@ class TestDbLibraryWindow(TestCase):
         self.dut._dbLib.getPath.return_value = path
         self.dut._populateFileInfoUi()
         self.dut.filePathLedit.setText.assert_called_once_with(path)
+
+    def test_updateConnectionUi(self) -> None:
+        """
+        The _updateConnectionUi method must disable all widgets of the not used
+        connection type.
+        """
+        widgetStates = ((True, False), (False, True))
+        connTypes = (True, False)
+        for idx, connType in enumerate(connTypes):
+            self.dut.dsnCbox.reset_mock()
+            self.dut.dsnUsrLedit.reset_mock()
+            self.dut.dsnPasswordLedit.reset_mock()
+            self.dut.connStrLedit.reset_mock()
+            self.dut._updateConnectionUi(connType)
+            self.dut.dsnCbox.setEnabled \
+                .assert_called_once_with(widgetStates[idx][0])
+            self.dut.dsnUsrLedit.setEnabled \
+                .assert_called_once_with(widgetStates[idx][0])
+            self.dut.dsnPasswordLedit.setEnabled \
+                .assert_called_once_with(widgetStates[idx][0])
+            self.dut.connStrLedit.setEnabled \
+                .assert_called_once_with(widgetStates[idx][1])
