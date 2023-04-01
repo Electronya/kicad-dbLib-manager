@@ -239,6 +239,22 @@ class DbLibrary(QObject):
         """
         self._config['source']['timeout_seconds'] = timeout
 
+    def save(self, path: str = None) -> None:
+        """
+        Save the DB library. If a path is given, the library is saved as.
+
+        Params:
+            path:       The new library path if saving as.
+        """
+        if path is None:
+            savePath = self._path
+        else:
+            savePath = path
+        with open(savePath, 'w') as fd:
+            json.dump(self._config, fd)
+        self._path = savePath
+        self._savedConfig = self._config.copy()
+
     def getOdbcDsnList(self) -> tuple:
         """
         Get the system active ODBC DSN list.
@@ -251,12 +267,4 @@ class DbLibrary(QObject):
     def testConnection(self) -> None:
         """
         Test the library DB connection.
-        """
-
-    def save(self, path: str = None) -> None:
-        """
-        Save the DB library. If a path is given, the library is saved as.
-
-        Params:
-            path:       The new library path if saving as.
         """

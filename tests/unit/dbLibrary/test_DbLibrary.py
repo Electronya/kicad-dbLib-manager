@@ -420,3 +420,72 @@ class TestDbLibrary(TestCase):
                          timeout,
                          'setSourceTimeout failed to update the DB library '
                          'data source timeout.')
+
+    def test_saveOpenFileError(self) -> None:
+        """
+        The save method must raise an exception when opening the library
+        file.
+        """
+        errMsg = 'test error'
+        with patch('builtins.open') as mockedOpen, \
+                self.assertRaises(OSError) as context:
+            mockedOpen.side_effect = OSError(errMsg)
+            self.dut.save()
+        self.assertEqual(str(context.exception), errMsg,
+                         'save failed to raise an exception when opening '
+                         'the library file fails.')
+
+    def test_saveDumpError(self) -> None:
+        """
+        The save method must raise an exception when dumping the configuration
+        fails.
+        """
+        errMsg = 'test error'
+        with patch('builtins.open'), patch(self.jsonPkg) as mockedJsonPkg, \
+                self.assertRaises(json.JSONDecodeError) as context:
+            mockedJsonPkg.dump.side_effect = json.JSONDecodeError(errMsg,
+                                                                  'test', 2)
+            self.dut.save()
+        self.assertEqual(str(context.exception),
+                         f"{errMsg}: line 1 column 3 (char 2)",
+                         'save failed to raise an exception when dumping the '
+                         'configuration fails.')
+
+    def test_saveOriginal(self) -> None:
+        """
+        The save method must save the configuration changes as the original
+        library file when no new path is given.
+        """
+        self.dut._config['name'] = 'new name'
+        with patch('builtins.open') as mockedOpen, \
+                patch(self.jsonPkg) as mockedJsonPkg:
+            self.dut.save()
+            mockedOpen.assert_called_once_with(self.libPath, 'w')
+            mockedJsonPkg.dump.assert_called_once_with(self.dut._config,
+                                                       mockedOpen().__enter__())    # noqa: E501
+            self.assertEqual(self.dut._path, self.libPath,
+                             'save failed to save the config changes as the '
+                             'original library file.')
+            self.assertEqual(self.dut._savedConfig, self.dut._config,
+                             'save failed to copy the config in order to '
+                             'manage changes.')
+
+    def test_saveAs(self) -> None:
+        """
+        The save method must save the configuration changes as a new library
+        file when a new path is given.
+        """
+        newPath = 'new/path/to/library.kicad_dbl'
+        self.dut._config['name'] = 'new name'
+        with patch('builtins.open') as mockedOpen, \
+                patch(self.jsonPkg) as mockedJsonPkg:
+            self.dut.save(newPath)
+            mockedOpen.assert_called_once_with(newPath, 'w')
+            mockedJsonPkg.dump.assert_called_once_with(self.dut._config,
+                                                       mockedOpen().__enter__())    # noqa: E501
+            self.assertEqual(self.dut._path, newPath,
+                             'save failed to save the config changes as the '
+                             'original library file.')
+            self.assertEqual(self.dut._savedConfig, self.dut._config,
+                             'save failed to copy the config in order to '
+                             'manage changes.')
