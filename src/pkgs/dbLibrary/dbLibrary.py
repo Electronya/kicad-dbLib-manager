@@ -51,6 +51,19 @@ class DbLibrary(QObject):
         with open(self._path) as fd:
             self._config = json.load(fd)
 
+    def isSaved(self) -> bool:
+        """
+        Check if any and all changed have been saved.
+
+        Return
+            True if any and all changes have been saved, False otherwise.
+        """
+
+    def discardChanges(self) -> None:
+        """
+        Discard any and all unsaved changes.
+        """
+
     def getPath(self) -> str:
         """
         Get the library path.

@@ -1,6 +1,7 @@
 import logging
 
 import PySide2.QtCore as qtc
+import PySide2.QtGui as qtg
 import PySide2.QtWidgets as qtw
 
 from .dbLibraryWindow_auto import Ui_dbLibWindow
@@ -21,7 +22,6 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         self.setupUi(self)
         self._setupUi()
         self._populateUi()
-        self.installEventFilter(self)
         self._logger.info('UI loaded')
 
     def _setupUi(self) -> None:
@@ -32,7 +32,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         self._setupLibInfoUi()
         self._setupConnUi()
         self._setupFileInfoUi()
-        self.closePbtn.clicked.connect(self._close)
+        self.closePbtn.clicked.connect(self.close)
 
     def _setupVerUi(self) -> None:
         """
@@ -181,24 +181,31 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
                              filter='DB Library (*.kicad_dbl)')
         self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
 
-    @qtc.Slot()
-    def _close(self) -> None:
+    def closeEvent(self, event: qtg.QCloseEvent) -> None:
         """
-        Do the checks before closing.
-        """
-
-    def eventFilter(self, watched: qtc.QObject, event: qtc.QEvent) -> bool:
-        """
-        DB library window event filter.
+        DB library window close event handler.
 
         Params:
-            watched:        The event target.
             event:          The event.
 
         Return
             True if event was handled, False otherwise.
         """
-        if event.type() == qtc.QEvent.Close:
-            self._logger.info('closing')
-            return True
-        return False
+        self._logger.debug('trying to close window')
+        needClosing = True
+        if not self._dbLib.isSaved():
+            choice = qtw.QMessageBox \
+                .question(self, 'Changed not saved',
+                          buttons=(qtw.QMessageBox.Discard |
+                                   qtw.QMessageBox.Save |
+                                   qtw.QMessageBox.Cancel))
+            if choice == qtw.QMessageBox.Discard:
+                self._dbLib.discardChanges()
+            if choice == qtw.QMessageBox.Save:
+                self._dbLib.save()
+            if choice == qtw.QMessageBox.Cancel:
+                needClosing = False
+        if needClosing:
+            event.accept()
+        else:
+            event.ignore()

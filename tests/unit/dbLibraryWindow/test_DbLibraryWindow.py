@@ -87,19 +87,6 @@ class TestDbLibraryWindow(TestCase):
             mockedSetupUi.assert_called_once()
             mockedPopUi.assert_called_once()
 
-    def test_constructorInstallEventFilter(self) -> None:
-        """
-        The constructor must install the event filter.
-        """
-        with patch(self.QMainWindow), patch(self.loggingMod), \
-                patch.object(DbLibraryWindow, 'setupUi'), \
-                patch.object(DbLibraryWindow, '_setupUi'), \
-                patch.object(DbLibraryWindow, '_populateUi'), \
-                patch.object(DbLibraryWindow, 'installEventFilter') \
-                as mockedEvFilter:
-            dut = DbLibraryWindow(self.mockedDbLib)
-            mockedEvFilter.assert_called_once_with(dut)
-
     def test_setupUiSetupGroupBox(self) -> None:
         """
         The _setupUi method must setup all the group boxes UI.
@@ -126,7 +113,7 @@ class TestDbLibraryWindow(TestCase):
                 patch.object(self.dut, '_setupFileInfoUi'):
             self.dut._setupUi()
             self.dut.closePbtn.clicked.connect \
-                .assert_called_once_with(self.dut._close)
+                .assert_called_once_with(self.dut.close)
 
     def test_setupVerUi(self) -> None:
         """
@@ -357,3 +344,58 @@ class TestDbLibraryWindow(TestCase):
                                          filter='DB Library (*.kicad_dbl)')
             self.dut._dbLib.save \
                 .assert_called_once_with(path=f"{newLibPath}.kicad_dbl")
+
+    def test_closeEventChangeNotSaved(self) -> None:
+        """
+        The closeEvent method must notify the user that changes have not been
+        saved and ask them to either discard or save the changes
+        or cancel the close operation.
+        """
+        mockedEvent = Mock()
+        self.dut._dbLib.isSaved.return_value = False
+        with patch(self.QMessageBox) as mockedMsgBox:
+            self.dut.closeEvent(mockedEvent)
+            mockedMsgBox.question \
+                .assert_called_once_with(self.dut,
+                                         'Changed not saved',
+                                         buttons=(mockedMsgBox.Discard |
+                                                  mockedMsgBox.Save |
+                                                  mockedMsgBox.Cancel))
+
+    def test_closeEventDiscardChanges(self) -> None:
+        """
+        The closeEvent method must discard any and all unsaved changes and
+        accept the close event when the user choose to do so.
+        """
+        mockedEvent = Mock()
+        self.dut._dbLib.isSaved.return_value = False
+        with patch(self.QMessageBox) as mockedMsgBox:
+            mockedMsgBox.question.return_value = mockedMsgBox.Discard
+            self.dut.closeEvent(mockedEvent)
+            self.dut._dbLib.discardChanges.assert_called_once()
+            mockedEvent.accept.assert_called_once()
+
+    def test_closeEventSaveChanges(self) -> None:
+        """
+        The closeEvent method must save any and all unsaved changes and
+        accept the close event when the user choose to do so.
+        """
+        mockedEvent = Mock()
+        self.dut._dbLib.isSaved.return_value = False
+        with patch(self.QMessageBox) as mockedMsgBox:
+            mockedMsgBox.question.return_value = mockedMsgBox.Save
+            self.dut.closeEvent(mockedEvent)
+            self.dut._dbLib.save.assert_called_once()
+            mockedEvent.accept.assert_called_once()
+
+    def test_closeEventCancel(self) -> None:
+        """
+        The closeEvent method must ignore the close event when the user choose
+        to do so.
+        """
+        mockedEvent = Mock()
+        self.dut._dbLib.isSaved.return_value = False
+        with patch(self.QMessageBox) as mockedMsgBox:
+            mockedMsgBox.question.return_value = mockedMsgBox.Cancel
+            self.dut.closeEvent(mockedEvent)
+            mockedEvent.ignore.assert_called_once()
