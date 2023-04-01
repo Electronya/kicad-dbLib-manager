@@ -38,6 +38,7 @@ class TestDbLibraryWindow(TestCase):
             mockedLogMod.getLogger.return_value = self.mockedLogger
             self.dut = DbLibraryWindow(self.mockedDbLib)
         self._setUpMockedWidget()
+        self.dut.errSig = Mock()
 
     def _setUpMockedWidget(self) -> None:
         """
@@ -327,6 +328,40 @@ class TestDbLibraryWindow(TestCase):
                 mockedMsgBox.setText.assert_called_once_with(messages[idx])
                 mockedMsgBox.setIcon.assert_called_once_with(icon)
 
+    def test_saveLibError(self) -> None:
+        """
+        The _saveLib method must catch any exception from the save operation
+        and signal the error.
+        """
+        errMsg = 'test error'
+        self.dut._dbLib.save.side_effect = OSError(errMsg)
+        self.dut._saveLib()
+        self.dut.errSig.emit.assert_called_once_with(qtw.QMessageBox.Warning,
+                                                     errMsg)
+
+    def test_saveLib(self) -> None:
+        """
+        The _saveLib method must save the library.
+        """
+        self.dut._saveLib()
+        self.dut._dbLib.save.assert_called_once()
+
+    def test_saveLibAsError(self) -> None:
+        """
+        The _saveLibAS method must catch any exception from the save operation
+        and signal the error.
+        """
+        errMsg = 'test error'
+        baseLibPath = 'path/to/library.kicad_dbl'
+        newLibPath = 'new/path/library'
+        self.mockedDbLib.getPath.return_value = baseLibPath
+        self.mockedDbLib.save.side_effect = OSError(errMsg)
+        with patch(self.QFileDialog) as mockedFileDialog:
+            mockedFileDialog.getSaveFileName.return_value = (newLibPath, '')
+            self.dut._saveLibAs()
+            self.dut.errSig.emit \
+                .assert_called_once_with(qtw.QMessageBox.Warning, errMsg)
+
     def test_saveLibAs(self) -> None:
         """
         The _saveLibAs method must open a save dialog window that allow
@@ -374,6 +409,21 @@ class TestDbLibraryWindow(TestCase):
             self.dut.closeEvent(mockedEvent)
             self.dut._dbLib.discardChanges.assert_called_once()
             mockedEvent.accept.assert_called_once()
+
+    def test_closeEventSaveChangesError(self) -> None:
+        """
+        The closeEvent method must catch any exception raise byt the save
+        operation when the user choose to save the library.
+        """
+        errMsg = 'test error'
+        mockedEvent = Mock()
+        self.dut._dbLib.isSaved.return_value = False
+        self.dut._dbLib.save.side_effect = OSError(errMsg)
+        with patch(self.QMessageBox) as mockedMsgBox:
+            mockedMsgBox.question.return_value = mockedMsgBox.Save
+            self.dut.closeEvent(mockedEvent)
+            self.dut.errSig.emit \
+                .assert_called_once_with(qtw.QMessageBox.Warning, errMsg)
 
     def test_closeEventSaveChanges(self) -> None:
         """

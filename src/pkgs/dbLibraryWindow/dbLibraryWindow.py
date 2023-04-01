@@ -75,7 +75,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         """
         Setup the file info UI.
         """
-        self.fileSavePbtn.clicked.connect(self._dbLib.save)
+        self.fileSavePbtn.clicked.connect(self._saveLib)
         self.saveAsPbtn.clicked.connect(self._saveLibAs)
 
     def _populateUi(self) -> None:
@@ -170,6 +170,18 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         msgBox.exec_()
 
     @qtc.Slot()
+    def _saveLib(self) -> None:
+        """
+        Save the library.
+        """
+        self._logger.debug('saving library')
+        try:
+            self._dbLib.save()
+        except Exception as e:
+            self._logger.error(e)
+            self.errSig.emit(qtw.QMessageBox.Warning, str(e))
+
+    @qtc.Slot()
     def _saveLibAs(self) -> None:
         """
         Save the DB library as.
@@ -179,7 +191,11 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
             .getSaveFileName(self, caption='Save Library As',
                              dir=self._dbLib.getPath(),
                              filter='DB Library (*.kicad_dbl)')
-        self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
+        try:
+            self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
+        except Exception as e:
+            self._logger.error(e)
+            self.errSig.emit(qtw.QMessageBox.Warning, str(e))
 
     def closeEvent(self, event: qtg.QCloseEvent) -> None:
         """
@@ -202,7 +218,11 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
             if choice == qtw.QMessageBox.Discard:
                 self._dbLib.discardChanges()
             if choice == qtw.QMessageBox.Save:
-                self._dbLib.save()
+                try:
+                    self._dbLib.save()
+                except Exception as e:
+                    self._logger.error(e)
+                    self.errSig.emit(qtw.QMessageBox.Warning, str(e))
             if choice == qtw.QMessageBox.Cancel:
                 needClosing = False
         if needClosing:
