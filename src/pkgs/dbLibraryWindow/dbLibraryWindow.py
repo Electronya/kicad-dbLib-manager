@@ -50,7 +50,7 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
         self.libNameLedit.editingFinished \
             .connect(lambda: self._dbLib.setName(self.libNameLedit.text()))
         self.libDescLedit.editingFinished \
-            .connect(lambda: self._dbLib.setNam(self.libDescLedit.text()))
+            .connect(lambda: self._dbLib.setDescription(self.libDescLedit.text()))          # noqa: E501
 
     def _setupConnUi(self) -> None:
         """
