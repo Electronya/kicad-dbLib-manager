@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMessageBox
 
 import os
@@ -18,7 +19,9 @@ class TestAppComposer(TestCase):
     def setUp(self) -> None:
         self.QAppClass = 'pkgs.appComposer.appComposer.QApplication'
         self.QMsgBox = 'pkgs.appComposer.appComposer.QMessageBox'
-        self.MainWindowClass = 'pkgs.appComposer.appComposer.MainWindow'
+        self.MainWindowCls = 'pkgs.appComposer.appComposer.MainWindow'
+        self.DbLibraryWindowCls = \
+            'pkgs.appComposer.appComposer.DbLibraryWindow'
         self.sys = 'pkgs.appComposer.appComposer.sys'
         self.loggingMod = 'pkgs.appComposer.appComposer.logging'
         self.mockedLogger = Mock()
@@ -26,7 +29,7 @@ class TestAppComposer(TestCase):
         self.AppWindow = Mock()
         with patch(self.loggingMod) as mockedLoggingMod, \
                 patch(self.QAppClass) as mockedQApplication, \
-                patch(self.MainWindowClass) as mockedAppWindow:
+                patch(self.MainWindowCls) as mockedAppWindow:
             mockedLoggingMod.getLogger.return_value = self.mockedLogger
             mockedQApplication.return_value = self.QApplication
             mockedAppWindow.return_value = self.AppWindow
@@ -43,7 +46,7 @@ class TestAppComposer(TestCase):
         """
         self.mockedLogger.reset_mock()
         with patch(self.loggingMod) as mockedLoggingMod, \
-                patch(self.QAppClass), patch(self.MainWindowClass):
+                patch(self.QAppClass), patch(self.MainWindowCls):
             AppComposer()
             mockedLoggingMod.getLogger.assert_called_once_with('app.composer')
 
@@ -53,18 +56,24 @@ class TestAppComposer(TestCase):
         """
         with patch(self.loggingMod), \
                 patch(self.QAppClass) as mockedQApplication, \
-                patch(self.MainWindowClass):
+                patch(self.MainWindowCls):
             AppComposer()
             mockedQApplication.assert_called_once()
 
-    def test_constructorAppWindow(self):
+    def test_constructorMainWindow(self):
         """
-        The constructor must create the AppWindow.
+        The constructor must create the main window and connect to its signals.
         """
+        mockedMainWindow = Mock()
         with patch(self.loggingMod), patch(self.QAppClass), \
-                patch(self.MainWindowClass) as mockedAppWindow:
-            AppComposer()
-            mockedAppWindow.assert_called_once_with()
+                patch(self.MainWindowCls) as mockedMainWindowCls:
+            mockedMainWindowCls.return_value = mockedMainWindow
+            dut = AppComposer()
+            mockedMainWindowCls.assert_called_once_with()
+            mockedMainWindow.errSig.connect \
+                .assert_called_once_with(dut._createErrorMsgBox)
+            mockedMainWindow.dbLibSig.connect \
+                .assert_called_once_with(dut._openDbLibEditor)
 
     def test_run(self):
         """
@@ -78,6 +87,23 @@ class TestAppComposer(TestCase):
             self.AppWindow.show.assert_called_once()
             self.QApplication.exec_.assert_called_once()
             mockedSys.exit.assert_called_once_with(execReturn)
+
+    def test_openDbLibEditorDbLibWindow(self) -> None:
+        """
+        The _openDbLibEditor method must create and open a DBLibraryWindow
+        and connect its signals.
+        """
+        mockedDbLibWindow = Mock()
+        mockedDbLib = Mock()
+        with patch(self.DbLibraryWindowCls) as mockedDbLibWindowCls:
+            mockedDbLibWindowCls.return_value = mockedDbLibWindow
+            self.dut._openDbLibEditor(mockedDbLib)
+            mockedDbLibWindowCls.assert_called_once_with(mockedDbLib)
+            mockedDbLibWindow.errSig.connect \
+                .assert_called_once_with(self.dut._createErrorMsgBox)
+            mockedDbLibWindow.setWindowModality \
+                .assert_called_once_with(Qt.ApplicationModal)
+            mockedDbLibWindow.show.assert_called_once()
 
     def test_createErrorMsgBoxLogErr(self) -> None:
         """

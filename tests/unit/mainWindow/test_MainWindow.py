@@ -120,6 +120,18 @@ class TestMainWindow(TestCase):
                                          dir=QDir.homePath(),
                                          filter='DB Library (*.kicad_dbl)')
 
+    def test__newDbLibFileCancel(self) -> None:
+        """
+        The _newDbLibFile method must do nothing else if the user cancel
+        the save operation of the new library.
+        """
+        testFileInfo = ('', 'DB Library (*.kicad_dbl)')
+        with patch(self.QFileDialog) as mockedFileDialog, \
+                patch(self.DbLibrary) as mockedDbLib:
+            mockedFileDialog.getSaveFileName.return_value = testFileInfo
+            self.dut._newDbLibFile()
+            mockedDbLib.assert_not_called()
+
     def test_newDbLibFileCreateLibInst(self) -> None:
         """
         The _newDbLibFile method must create a new DB library instance with
@@ -130,7 +142,16 @@ class TestMainWindow(TestCase):
                 patch(self.DbLibrary) as mockedDbLib:
             mockedFileDialog.getSaveFileName.return_value = testFileInfo
             self.dut._newDbLibFile()
-            mockedDbLib.assert_called_once_with(testFileInfo[0], isNew=True)
+            mockedDbLib.assert_called_once_with(f"{testFileInfo[0]}.kicad_dbl",
+                                                isNew=True)
+
+    def test_newDbLibFileEnableEdit(self) -> None:
+        """
+        The _newDbLibFile method must enable the DB library edit action.
+        """
+        with patch(self.QFileDialog), patch(self.DbLibrary):
+            self.dut._newDbLibFile()
+            self.dut.actionEditDbLib.setEnabled.assert_called_once_with(True)
 
     def test_newDbLibFileEmitSig(self) -> None:
         """
@@ -154,6 +175,18 @@ class TestMainWindow(TestCase):
                 .assert_called_once_with(self.dut, caption='Open DB Library',
                                          dir=QDir.homePath(),
                                          filter='DB Library (*.kicad_dbl)')
+
+    def test_openDbLibFileCancel(self) -> None:
+        """
+        The _openDbLibFile method must do nothing else if the user cancel the
+        opening operation.
+        """
+        testFileInfo = ('', 'DB Library (*.kicad_dbl)')
+        with patch(self.QFileDialog) as mockedFileDialog, \
+                patch(self.DbLibrary) as mockedDbLib:
+            mockedFileDialog.getOpenFileName.return_value = testFileInfo
+            self.dut._openDbLibFile()
+            mockedDbLib.assert_not_called()
 
     def test_openDbLibFileNewInst(self) -> None:
         """

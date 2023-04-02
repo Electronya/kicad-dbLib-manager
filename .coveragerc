@@ -4,8 +4,8 @@ omit =
     */site-packages/*
     */distutils/*
     tests/*
-    src/assets/resources.py
-    src/*Window/*Window_auto.py
+    src/pkgs/assets/resources.py
+    src/pkgs/*Window/*Window_auto.py
 
 [report]
 exclude_lines =

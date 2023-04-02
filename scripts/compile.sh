@@ -5,6 +5,7 @@ declare -A WINDOWS=()
 #### Page list ####
 WINDOWS[main]='main'
 # WINDOWS[about]='about'
+WINDOWS[dbLibrary]='dbLibrary'
 
 #### Print red text to the terminal ####
 function redPrint {
@@ -57,7 +58,7 @@ function compileWindow {
     if [[ "$1" != "" ]]
     then
         greenPrint "---- Compiling $1 window ----"
-        name=$(echo $1 | tr '[:upper:]' '[:lower:]')
+        name=$1
         pyside2-uic -o src/pkgs/${name}Window/${name}Window_auto.py src/pkgs/${name}Window/${name}Window.ui
         if [ $? -ne 0 ]
         then

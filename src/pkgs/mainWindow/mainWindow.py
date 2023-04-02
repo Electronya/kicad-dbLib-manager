@@ -49,8 +49,10 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
             .getSaveFileName(self, caption='New DB Library',
                              dir=qtc.QDir.homePath(),
                              filter='DB Library (*.kicad_dbl)')
-        self._dbLib = DbLibrary(fileInfo[0], isNew=True)
-        self.dbLibSig.emit(self._dbLib)
+        if fileInfo[0]:
+            self._dbLib = DbLibrary(f"{fileInfo[0]}.kicad_dbl", isNew=True)
+            self.actionEditDbLib.setEnabled(True)
+            self.dbLibSig.emit(self._dbLib)
 
     @qtc.Slot()
     def _openDbLibFile(self) -> None:
@@ -62,8 +64,9 @@ class MainWindow(qtw.QMainWindow, Ui_mainWindow):
             .getOpenFileName(self, caption='Open DB Library',
                              dir=qtc.QDir.homePath(),
                              filter='DB Library (*.kicad_dbl)')
-        self._dbLib = DbLibrary(fileInfo[0])
-        self.actionEditDbLib.setEnabled(True)
+        if fileInfo[0]:
+            self._dbLib = DbLibrary(fileInfo[0])
+            self.actionEditDbLib.setEnabled(True)
 
     @qtc.Slot()
     def _editDbLibFile(self) -> None:

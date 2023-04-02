@@ -21,7 +21,7 @@ class TestLogger(TestCase):
         self.argparsePkg = 'logger.argparse'
         self.loggingMod = 'logger.logging'
         self.appCmpts = ['app', 'app.composer', 'app.windows.main',
-                         'app.windows.ctrlr', 'app.windows.ctrlr.model']
+                         'app.windows.dbLibrary', 'app.library']
         self.testArg = Namespace()
         self.testArg.app = None
 
@@ -30,7 +30,8 @@ class TestLogger(TestCase):
         The _getAppCmptNames function must return the supported
         application component names.
         """
-        expectedRes = ['app', 'app.composer', 'app.windows.main']
+        expectedRes = ['app', 'app.composer', 'app.windows.main',
+                       'app.windows.dbLibrary', 'app.library']
         testResult = dut._getAppCmptNames()
         self.assertEqual(testResult, expectedRes, '_getAppCmptNames failed '
                          'to return the supported app component names.')
@@ -92,7 +93,10 @@ class TestLogger(TestCase):
         expectedResult = deepcopy(_loggingSettings)
         expectedResult['handlers']['console']['level'] = 'DEBUG'
         expectedResult['loggers']['app.windows.main']['level'] = 'DEBUG'
-        self.testArg.app = 'app.windows.main'
+        expectedResult['loggers']['app.test.logger'] = {'level': 'DEBUG',
+                                                        'handlers': ['console'],    # noqa: E501
+                                                        'propagate': False}
+        self.testArg.app = 'app.windows.main,app.test.logger'
         loggersList = [self.testArg.app]
         for loggers in loggersList:
             dut._setInDebugMode(loggers)
