@@ -1,3 +1,4 @@
+import copy
 import logging
 import json
 
@@ -42,7 +43,7 @@ class DbLibrary(QObject):
         }
         with open(self._path, 'w') as fd:
             self._config = template
-            self._savedConfig = self._config.copy()
+            self._savedConfig = copy.deepcopy(self._config)
             json.dump(template, fd, indent=4)
 
     def _openLib(self) -> None:
@@ -51,7 +52,7 @@ class DbLibrary(QObject):
         """
         with open(self._path) as fd:
             self._config = json.load(fd)
-            self._savedConfig = self._config.copy()
+            self._savedConfig = copy.deepcopy(self._config)
 
     def isSaved(self) -> bool:
         """

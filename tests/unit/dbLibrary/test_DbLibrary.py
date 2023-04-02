@@ -1,3 +1,4 @@
+import copy
 import json
 
 from unittest import TestCase
@@ -19,6 +20,7 @@ class TestDbLibrary(TestCase):
         """
         The test cases set up.
         """
+        self.copyPkg = 'pkgs.dbLibrary.dbLibrary.copy'
         self.jsonPkg = 'pkgs.dbLibrary.dbLibrary.json'
         self.loggingPkg = 'pkgs.dbLibrary.dbLibrary.logging'
         self.mockedLogger = Mock()
@@ -44,7 +46,7 @@ class TestDbLibrary(TestCase):
         with patch(self.loggingPkg), patch.object(DbLibrary, '_openLib'):
             self.dut = DbLibrary(self.libPath)
         self.dut._config = self.libConfig
-        self.dut._savedConfig = self.libConfig.copy()
+        self.dut._savedConfig = copy.deepcopy(self.libConfig)
 
     def test_constructorGetLogger(self) -> None:
         """
@@ -139,12 +141,15 @@ class TestDbLibrary(TestCase):
         DB library file.
         """
         with patch('builtins.open') as mockedOpen, \
+                patch(self.copyPkg) as mockedCopyPkg, \
                 patch(self.jsonPkg) as mockedJsonPkg:
+            mockedCopyPkg.deepcopy.return_value = copy.deepcopy(self.template)
             self.dut._createNewLib()
             mockedOpen.assert_called_once_with(self.dut._path, 'w')
             mockedJsonPkg.dump.assert_called_once_with(self.template,
                                                        mockedOpen().__enter__(),    # noqa: E501
                                                        indent=4)
+            mockedCopyPkg.deepcopy.assert_called_once_with(self.dut._config)
             self.assertEqual(self.dut._config, self.template,
                              '_createNewLib failed to save the template '
                              'config.')
@@ -189,11 +194,14 @@ class TestDbLibrary(TestCase):
         configuration.
         """
         with patch('builtins.open', mock_open(read_data=self.libConfigStr)) \
-                as mockedOpen, patch(self.jsonPkg) as mockedJsonPkg:
+                as mockedOpen, patch(self.copyPkg) as mockedCopyPkg, \
+                patch(self.jsonPkg) as mockedJsonPkg:
+            mockedCopyPkg.deepcopy.return_value = copy.deepcopy(self.libConfig)
             mockedJsonPkg.load.return_value = self.libConfig
             self.dut._openLib()
             mockedOpen.assert_called_once_with(self.dut._path)
             mockedJsonPkg.load.assert_called_once_with(mockedOpen().__enter__())    # noqa: E501
+            mockedCopyPkg.deepcopy.assert_called_once_with(self.dut._config)
             self.assertEqual(self.dut._config, self.libConfig,
                              '_openLib failed to load the library config.')
             self.assertEqual(self.dut._config, self.dut._savedConfig,
