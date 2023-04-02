@@ -93,7 +93,10 @@ class TestLogger(TestCase):
         expectedResult = deepcopy(_loggingSettings)
         expectedResult['handlers']['console']['level'] = 'DEBUG'
         expectedResult['loggers']['app.windows.main']['level'] = 'DEBUG'
-        self.testArg.app = 'app.windows.main'
+        expectedResult['loggers']['app.test.logger'] = {'level': 'DEBUG',
+                                                        'handlers': ['console'],    # noqa: E501
+                                                        'propagate': False}
+        self.testArg.app = 'app.windows.main,app.test.logger'
         loggersList = [self.testArg.app]
         for loggers in loggersList:
             dut._setInDebugMode(loggers)
