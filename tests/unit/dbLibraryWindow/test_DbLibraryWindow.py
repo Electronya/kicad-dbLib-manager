@@ -386,13 +386,15 @@ class TestDbLibraryWindow(TestCase):
         saved and ask them to either discard or save the changes
         or cancel the close operation.
         """
+        question = 'Unsaved changes detected.\nDou you wish to:\nDiscard, '
+        'save or cancel?'
         mockedEvent = Mock()
         self.dut._dbLib.isSaved.return_value = False
         with patch(self.QMessageBox) as mockedMsgBox:
             self.dut.closeEvent(mockedEvent)
             mockedMsgBox.question \
                 .assert_called_once_with(self.dut,
-                                         'Changed not saved',
+                                         'Changed not saved', question,
                                          buttons=(mockedMsgBox.Discard |
                                                   mockedMsgBox.Save |
                                                   mockedMsgBox.Cancel))

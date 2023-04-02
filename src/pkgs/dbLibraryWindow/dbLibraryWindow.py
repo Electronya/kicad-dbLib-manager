@@ -208,10 +208,12 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
             True if event was handled, False otherwise.
         """
         self._logger.debug('trying to close window')
+        question = 'Unsaved changes detected.\nDou you wish to:\nDiscard, '
+        'save or cancel?'
         needClosing = True
         if not self._dbLib.isSaved():
             choice = qtw.QMessageBox \
-                .question(self, 'Changed not saved',
+                .question(self, 'Changed not saved', question,
                           buttons=(qtw.QMessageBox.Discard |
                                    qtw.QMessageBox.Save |
                                    qtw.QMessageBox.Cancel))
