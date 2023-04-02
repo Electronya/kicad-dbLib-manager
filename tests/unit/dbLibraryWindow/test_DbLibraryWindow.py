@@ -362,6 +362,22 @@ class TestDbLibraryWindow(TestCase):
             self.dut.errSig.emit \
                 .assert_called_once_with(qtw.QMessageBox.Warning, errMsg)
 
+    def test_saveLibAsCancel(self) -> None:
+        """
+        The _saveLibAs method must do nothing else if the user cancel the
+        operation.
+        """
+        baseLibPath = 'path/to/library.kicad_dbl'
+        self.mockedDbLib.getPath.return_value = baseLibPath
+        with patch(self.QFileDialog) as mockedFileDialog:
+            mockedFileDialog.getSaveFileName.return_value = ('', '')
+            self.dut._saveLibAs()
+            mockedFileDialog.getSaveFileName \
+                .assert_called_once_with(self.dut, caption='Save Library As',
+                                         dir=baseLibPath,
+                                         filter='DB Library (*.kicad_dbl)')
+            self.dut._dbLib.save.assert_not_called()
+
     def test_saveLibAs(self) -> None:
         """
         The _saveLibAs method must open a save dialog window that allow

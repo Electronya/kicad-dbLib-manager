@@ -191,11 +191,12 @@ class DbLibraryWindow(qtw.QMainWindow, Ui_dbLibWindow):
             .getSaveFileName(self, caption='Save Library As',
                              dir=self._dbLib.getPath(),
                              filter='DB Library (*.kicad_dbl)')
-        try:
-            self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
-        except Exception as e:
-            self._logger.error(e)
-            self.errSig.emit(qtw.QMessageBox.Warning, str(e))
+        if fileInfo[0]:
+            try:
+                self._dbLib.save(path=f"{fileInfo[0]}.kicad_dbl")
+            except Exception as e:
+                self._logger.error(e)
+                self.errSig.emit(qtw.QMessageBox.Warning, str(e))
 
     def closeEvent(self, event: qtg.QCloseEvent) -> None:
         """
