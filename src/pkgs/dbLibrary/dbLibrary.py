@@ -2,6 +2,8 @@ import copy
 import logging
 import json
 
+from typing import Tuple
+
 from PySide2.QtCore import QObject, Signal
 
 
@@ -256,7 +258,7 @@ class DbLibrary(QObject):
         self._path = savePath
         self._savedConfig = self._config.copy()
 
-    def getOdbcDsnList(self) -> tuple:
+    def getOdbcDsnList(self) -> Tuple[str]:
         """
         Get the system active ODBC DSN list.
 

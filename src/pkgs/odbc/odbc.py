@@ -1,9 +1,10 @@
 from logging import Logger
+from typing import Tuple
 
 import pyodbc
 
 
-def getDsnList(logger: Logger) -> tuple[str]:
+def getDsnList(logger: Logger) -> Tuple[str]:
     """
     Get the current system DSN list.
 
