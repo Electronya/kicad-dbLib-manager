@@ -22,6 +22,7 @@ class TestDbLibrary(TestCase):
         """
         self.copyPkg = 'pkgs.dbLibrary.dbLibrary.copy'
         self.jsonPkg = 'pkgs.dbLibrary.dbLibrary.json'
+        self.getDsnList = 'pkgs.dbLibrary.dbLibrary.getDsnList'
         self.loggingPkg = 'pkgs.dbLibrary.dbLibrary.logging'
         self.mockedLogger = Mock()
         self.template = {
@@ -497,3 +498,16 @@ class TestDbLibrary(TestCase):
             self.assertEqual(self.dut._savedConfig, self.dut._config,
                              'save failed to copy the config in order to '
                              'manage changes.')
+
+    def test_getOdbcDsnList(self) -> None:
+        """
+        The getOdbcDsnList method must get and return the list of ODBC DSN
+        sources.
+        """
+        testDsnList = ('dsn 1', 'dsn 2', 'dsn 3')
+        with patch(self.getDsnList) as mockedGetDsnList:
+            mockedGetDsnList.return_value = testDsnList
+            result = self.dut.getOdbcDsnList()
+            mockedGetDsnList.assert_called_once_with(self.dut._logger)
+            self.assertEqual(result, testDsnList,
+                             'getOdbcDsnList failed to return the DSN list.')

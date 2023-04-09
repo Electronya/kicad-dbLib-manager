@@ -6,6 +6,8 @@ from typing import Tuple
 
 from PySide2.QtCore import QObject, Signal
 
+from ..odbc import getDsnList
+
 
 class DbLibrary(QObject):
     """
@@ -265,7 +267,7 @@ class DbLibrary(QObject):
         Return
             A tuple containing the system ODBC DSN list.
         """
-        return ()
+        return getDsnList(self._logger)
 
     def testConnection(self) -> None:
         """
